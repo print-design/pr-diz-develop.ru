@@ -1,0 +1,312 @@
+<?php
+require_once '../include/topscripts.php';
+
+$calculation_id = filter_input(INPUT_GET, 'calculation_id');
+$lamination = filter_input(INPUT_GET, 'lamination');
+$run2 = filter_input(INPUT_GET, 'run2');
+$work_id = filter_input(INPUT_GET, 'work_id');
+$machine_id = filter_input(INPUT_GET, 'machine_id');
+$date = filter_input(INPUT_GET, 'date');
+$shift = filter_input(INPUT_GET, 'shift');
+$before = filter_input(INPUT_GET, 'before');
+$error = '';
+
+class Edition {
+    public $WorkId;
+    public $MachineId;
+    public $Date;
+    public $Shift;
+    public $WorkTime;
+    public $Position;
+}
+
+// Получаем данные расчёта
+$work_type_id = 0;
+$ink_number = 0;
+$length_pure_1 = 0;
+$length_pure_2 = 0;
+$length_pure_3 = 0;
+$has_lamination = false;
+$two_laminations = false;
+$has_run2 = false;
+
+$sql = "select c.work_type_id, c.ink_number, c.ink_run2_number, cr.length_pure_1, cr.length_pure_2, cr.length_pure_3, c.lamination1_film_variation_id, c.lamination1_individual_film_name, c.lamination2_film_variation_id, c.lamination2_individual_film_name, c.ink_run2_1 "
+        . "from calculation c "
+        . "inner join calculation_result cr on cr.calculation_id = c.id "
+        . "where c.id = $calculation_id";
+$fetcher = new Fetcher($sql);
+if($row = $fetcher->Fetch()) {
+    $work_type_id = $row['work_type_id'];
+    if($run2) {
+        $ink_number = empty($row['ink_run2_number']) ? 0 : $row['ink_run2_number'];
+    }
+    else {
+        $ink_number = empty($row['ink_number']) ? 0 : $row['ink_number'];
+    }
+    $length_pure_1 = $row['length_pure_1'];
+    $length_pure_2 = $row['length_pure_2'];
+    $length_pure_3 = $row['length_pure_3'];
+    
+    if(!empty($row['lamination1_film_variation_id']) || !empty($row['lamination1_individual_film_name'])) {
+        $has_lamination = true;
+    }
+    
+    if(!empty($row['lamination2_film_variation_id']) || !empty($row['lamination2_individual_film_name'])) {
+        $two_laminations = true;
+    }
+    
+    if(!empty($row["ink_run2_1"])) {
+        $has_run2 = true;
+    }
+}
+
+// Если не указываем следующую позицию, то position - на 1 больше, чем максимальная позиция данной смены.
+// Если указываем следующую позицию, то 
+// увеличиваем позицию на 1 у следующего тиража или события и всех следующих за ним
+// и устанавливаем текущую позицию на 1 больше, чем максимальная позиция смены из тех, что меньше следующей позиции.
+$edition = new Edition();
+$edition->WorkId = $work_id;
+$edition->MachineId = $machine_id;
+$edition->Date = $date;
+$edition->Shift = $shift;
+
+if($work_id == WORK_PRINTING) {
+    $machine_speed = 0;
+    $machine_tuning_time = 0;
+    $machine_waste_percent = 0;
+    $sql = "select speed, speed_run2 from norm_machine where machine_id = ".$edition->MachineId." order by date desc limit 1";
+    $fetcher = new Fetcher($sql);
+    if($row = $fetcher->Fetch()) {
+        if($run2) {
+            $machine_speed = $row['speed_run2'];
+        }
+        else {
+            $machine_speed = $row['speed'];
+        }
+    }
+    $sql = "select time, waste_percent, time_run2, waste_percent_run2 from norm_priladka where machine_id = ".$edition->MachineId." order by date desc limit 1";
+    $fetcher = new Fetcher($sql);
+    if($row = $fetcher->Fetch()) {
+        if($run2) {
+            $machine_tuning_time = $row['time_run2'];
+            $machine_waste_percent = $row['waste_percent_run2'];
+        }
+        else {
+            $machine_tuning_time = $row['time'];
+            $machine_waste_percent = $row['waste_percent'];        
+        }
+    }
+    $edition->WorkTime = ($ink_number * $machine_tuning_time / 60.0) + ($length_pure_1 * (1 + ($machine_waste_percent / 100)) / $machine_speed / 1000.0);
+}
+elseif($work_id == WORK_LAMINATION) {
+    $length_pure = $length_pure_2;
+    if($two_laminations) {
+        $length_pure = $length_pure_3;
+    }
+    $laminator_speed = 0;
+    $laminator_tuning_time = 0;
+    $laminator_waste_percent = 0;
+    $sql = "select speed from norm_laminator where laminator_id = ".$edition->MachineId." order by date desc limit 1";
+    $fetcher = new Fetcher($sql);
+    if($row = $fetcher->Fetch()) {
+        $laminator_speed = $row['speed'];
+    }
+    $sql = "select time, waste_percent from norm_laminator_priladka where laminator_id = ".$edition->MachineId." order by date desc limit 1";
+    if($row = $fetcher->Fetch()) {
+        $laminator_tuning_time = $row['time'];
+        $laminator_waste_percent = $row['waste_percent'];
+    }
+    $edition->WorkTime = ($laminator_tuning_time / 60.0) + ($length_pure * (1 + ($laminator_waste_percent / 100.0)) / $laminator_speed / 1000.0);
+}
+elseif($work_id == WORK_CUTTING) {
+    $cutter_time = 0;
+    $cutter_speed = 0;
+    $sql = "select time, speed from norm_cutter where cutter_id = ".$edition->MachineId." order by date desc limit 1";
+    $fetcher = new Fetcher($sql);
+    if($row = $fetcher->Fetch()) {
+        $cutter_time = floatval($row['time']);
+        $cutter_speed = floatval($row['speed']);
+    }
+    
+    $edition->WorkTime = ($length_pure_1 / $cutter_speed / 1000.0) + ($cutter_time / 60.0);
+}
+
+if(empty($before) && $before !== 0 && $before !== '0') {
+    $max_edition = 0;
+    $max_continuation = 0;
+    $max_event = 0;
+    
+    $sql = "select max(ifnull(position, 0)) from plan_edition "
+            . "where work_id = $work_id and machine_id = $machine_id and date = '$date' and shift = '$shift'";
+    $fetcher = new Fetcher($sql);
+    $row = $fetcher->Fetch();
+    if(!$row) {
+        $error = "Ошибка при определении позиции тиража";
+        echo json_encode(array('error' => $error));
+        exit();
+    }
+    $max_edition = $row[0];
+    
+    $sql = "select count(pc.id) "
+            . "from plan_continuation pc "
+            . "inner join plan_edition e on pc.plan_edition_id = e.id "
+            . "where e.work_id = $work_id and e.machine_id = $machine_id and pc.date = '$date' and pc.shift = '$shift'";
+    $fetcher = new Fetcher($sql);
+    $row = $fetcher->Fetch();
+    if(!$row) {
+        $error = "Ошибка при определении позиции тиража";
+        echo json_encode(array('error' => $error));
+        exit();
+    }
+    $max_continuation = $row[0];
+    
+    $sql = "select max(ifnull(position, 0)) from plan_event "
+            . "where in_plan = 1 and work_id = $work_id and machine_id = $machine_id and date = '$date' and shift = '$shift'";
+    $fetcher = new Fetcher($sql);
+    $row = $fetcher->Fetch();
+    if(!$row) {
+        $error = "Ошибка при определении позиции события";
+        echo json_encode(array('error' => $error));
+        exit();
+    }
+    $max_event = $row[0];
+    
+    $edition->Position = max($max_edition, $max_continuation, $max_event) + 1;
+}
+else {
+    $sql = "update plan_edition set position = ifnull(position, 0) + 1 "
+            . "where work_id = $work_id and machine_id = $machine_id and date = '$date' and shift = '$shift' "
+            . "and position >= $before";
+    $executer = new Executer($sql);
+    $error = $executer->error;
+    if(!empty($error)) {
+        echo json_encode(array('error' => $error));
+        exit();
+    }
+    
+    $sql = "update plan_event set position = ifnull(position, 0) + 1 "
+            . "where in_plan = 1 and work_id = $work_id and machine_id = $machine_id and date = '$date' and shift = '$shift' "
+            . "and position >= $before";
+    $executer = new Executer($sql);
+    $error = $executer->error;
+    if(!empty($error)) {
+        echo json_encode(array('error' => $error));
+        exit();
+    }
+    
+    $max_edition = 0;
+    $max_continuation = 0;
+    $max_event = 0;
+    
+    $sql = "select max(ifnull(position, 0)) from plan_edition "
+            . "where work_id = $work_id and machine_id = $machine_id and date = '$date' and shift = '$shift' "
+            . "and position < $before";
+    $fetcher = new Fetcher($sql);
+    $row = $fetcher->Fetch();
+    if(!$row) {
+        $error = $fetcher->error;
+        echo json_encode(array('error' => $error));
+        exit();
+    }
+    $max_edition = $row[0];
+    
+    $sql = "select count(pc.id) "
+            . "from plan_continuation pc "
+            . "inner join plan_edition e on pc.plan_edition_id = e.id "
+            . "where e.work_id = $work_id and e.machine_id = $machine_id and pc.date = '$date' and pc.shift = '$shift'";
+    $fetcher = new Fetcher($sql);
+    $row = $fetcher->Fetch();
+    if(!$row) {
+        $error = "Ошибка при определении позиции тиража";
+        echo json_encode(array('error' => $error));
+        exit();
+    }
+    $max_continuation = $row[0];
+    
+    $sql = "select max(ifnull(position, 0)) "
+            . "from plan_event "
+            . "where in_plan = 1 and work_id = $work_id and machine_id = $machine_id and date = '$date' and shift = '$shift' "
+            . "and position < $before";
+    $fetcher = new Fetcher($sql);
+    $row = $fetcher->Fetch();
+    if(!$row) {
+        $error = $fetcher->error;
+        echo json_encode(array('error' => $error));
+        exit();
+    }
+    $max_event = $row[0];
+    
+    $edition->Position = max($max_edition, $max_continuation, $max_event) + 1;
+}
+
+$plan_edition_id = 0;
+
+$sql = "select id from plan_edition where calculation_id = $calculation_id and lamination = $lamination and run2 = $run2 and work_id = $work_id and machine_id = $machine_id" ;
+$fetcher = new Fetcher($sql);
+if($row = $fetcher->Fetch()) {
+    $plan_edition_id = $row[0];
+}
+
+if($plan_edition_id > 0) {
+    $sql = "update plan_edition set work_id = ".$edition->WorkId.", machine_id = ".$edition->MachineId.", date = '".$edition->Date."', shift = '".$edition->Shift."', worktime = ".$edition->WorkTime.", position = ".$edition->Position
+            ." where id = $plan_edition_id";
+    $executer = new Executer($sql);
+    $error = $executer->error;
+}
+else {
+    $sql = "insert into plan_edition (calculation_id, lamination, run2, work_id, machine_id, date, shift, worktime, position) "
+            . "values ($calculation_id, $lamination, $run2, ".$edition->WorkId.", ".$edition->MachineId.", '".$edition->Date."', '".$edition->Shift."', ".$edition->WorkTime.", ".$edition->Position.")";
+    $executer = new Executer($sql);
+    $error = $executer->error;
+    
+    if(empty($error) && $work_id == WORK_PRINTING && !$has_run2) {
+        // 1. Тип работы "печать", нет второго прогона.
+        // Статус устанавливаем "в плане печати".
+        $error = SetCalculationStatus($calculation_id, ORDER_STATUS_PLAN_PRINT, '');
+    }
+    elseif(empty ($error) && $work_id == WORK_PRINTING && $has_run2) {
+        // 2. Тип работы "печать", есть второй прогон.
+        // Статус устанавливаем "в плане печати".
+        // - два тиража
+        $editions_count = 0;
+        
+        $sql = "select count(id) from plan_edition where calculation_id = $calculation_id and work_id = $work_id";
+        $fetcher = new Fetcher($sql);
+        if($row = $fetcher->Fetch()) {
+            $editions_count = $row[0];
+        }
+        
+        if($editions_count == 2) {
+            $error = SetCalculationStatus($calculation_id, ORDER_STATUS_PLAN_PRINT, '');
+        }
+    }
+    elseif(empty ($error) && $work_id == WORK_LAMINATION && !$two_laminations) {
+        // 3. Тип работы "ламинация", ламинация одна.
+        // Статус устанавливаем "в плане ламинации".
+        $error = SetCalculationStatus($calculation_id, ORDER_STATUS_PLAN_LAMINATE, '');
+    }
+    elseif(empty ($error) && $work_id == WORK_LAMINATION && $two_laminations) {
+        // 4. Тип работы "ламинация", ламинации две.
+        // Статус устанавливаем "в плане ламинации":
+        // - два тиража,
+        $editions_count = 0;
+        
+        $sql = "select count(id) from plan_edition where calculation_id = $calculation_id and work_id = $work_id";
+        $fetcher = new Fetcher($sql);
+        if($row = $fetcher->Fetch()) {
+            $editions_count = $row[0];
+        }
+        
+        if($editions_count == 2) {
+            $error = SetCalculationStatus($calculation_id, ORDER_STATUS_PLAN_LAMINATE, '');
+        }
+    }
+    elseif(empty ($error) && $work_id == WORK_CUTTING) {
+        // 5. Тип работы "резка".
+        // Статус устанавливаем "в плане резки".
+        $error = SetCalculationStatus($calculation_id, ORDER_STATUS_PLAN_CUT, '');
+    }
+}
+
+echo json_encode(array('error' => $error));
+?>

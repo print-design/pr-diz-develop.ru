@@ -1,0 +1,3071 @@
+<?php
+require_once '../include/constants.php';
+
+// Данные приладки
+class DataPriladka {
+    public $time; // Время приладки
+    public $length; // Длина приладки 1 краски
+    public $stamp; // Длина приладки штампа
+    public $waste_percent; // Процент отходов от приладки
+    
+    public $time_run2; // Время приладки, второй прогон
+    public $length_run2; // Длина приладки 1 краски, второй прогон
+    public $waste_percent_run2; // Процент отходов от приладки, второй прогон
+
+    // Конструктор
+    public function __construct($time, $length, $stamp, $waste_percent, $time_run2, $length_run2, $waste_percent_run2) {
+        $this->time = $time;
+        $this->length = $length;
+        $this->stamp = $stamp;
+        $this->waste_percent = $waste_percent;
+        
+        $this->time_run2 = $time_run2;
+        $this->length_run2 = $length_run2;
+        $this->waste_percent_run2 = $waste_percent_run2;
+    }
+}
+
+// Характеристика печатной машины
+class DataMachine {
+    public $price; // Цена
+    public $speed; // Скорость
+    public $width; // Ширина машины
+    public $vaporization_expense; // Расход растворителя на испарение
+    
+    public $price_run2; // Цена второй прогон
+    public $speed_run2; // Скорость второй прогон
+    
+    // Контруктор
+    public function __construct($price, $speed, $width, $vaporization_expense, $price_run2, $speed_run) {
+        $this->price = $price;
+        $this->speed = $speed;
+        $this->width = $width;
+        $this->vaporization_expense = $vaporization_expense;
+        
+        $this->price_run2 = $price_run2;
+        $this->speed_run2 = $speed_run;
+    }
+}
+
+// Характеристика ламинатора
+class DataLaminator {
+    public $price; // Цена
+    public $speed; // Скорость
+    public $max_width; // Максимальная ширина
+    
+    // Конструктор
+    public function __construct($price, $speed, $max_width) {
+        $this->price = $price;
+        $this->speed = $speed;
+        $this->max_width = $max_width;
+    }
+}
+
+// Зарактеристика зазоров
+class DataGap {
+    public $gap_raport; // ЗазорРапорт
+    public $gap_stream; // ЗазорРучей
+    public $ski; // ширина одной лыжи
+    
+    // Конструктор
+    public function __construct($gap_raport, $gap_stream, $ski) {
+        $this->gap_raport = $gap_raport;
+        $this->gap_stream = $gap_stream;
+        $this->ski = $ski;
+    }
+}
+
+// Данные по краскам
+class DataInk {
+    public $c_price; // Cyan, цена
+    public $c_currency; // Cyan, валюта
+    public $c_expense; // Cyan, расход
+    public $m_price;
+    public $m_currency;
+    public $m_expense;
+    public $y_price;
+    public $y_currency;
+    public $y_expense;
+    public $k_price;
+    public $k_currency;
+    public $k_expense;
+    public $white_price;
+    public $white_currency;
+    public $white_expense;
+    public $panton_price;
+    public $panton_currency;
+    public $panton_expense;
+    public $lacquer_glossy_price;
+    public $lacquer_glossy_currency;
+    public $lacquer_glossy_expense;
+    public $lacquer_matte_price;
+    public $lacquer_matte_currency;
+    public $lacquer_matte_expense;
+    public $lacquer_selective_price;
+    public $lacquer_selective_currency;
+    public $lacquer_selective_expense;
+    public $solvent_etoxipropanol_price;
+    public $solvent_etoxipropanol_currency;
+    public $solvent_flexol82_price;
+    public $solvent_flexol82_currency;
+    public $solvent_part; // Расход растворителя на 1 кг краски
+    public $min_price_per_ink; // Мин. стоимость 1 цвета
+    public $self_adhesive_laquer_price; // Самоклейка, цена лака за кг
+    public $self_adhesive_laquer_currency; // Самоклейка, валюьа лака
+    public $self_adhesive_laquer_expense; // Самоклейка, расход чистого лака
+    public $min_percent; // Минимальный процент запечатки
+    
+    // Конструктор
+    public function __construct($c_price, $c_currency, $c_expense, $m_price, $m_currency, $m_expense, $y_price, $y_currency, $y_expense, $k_price, $k_currency, $k_expense, $white_price, $white_currency, $white_expense, $panton_price, $panton_currency, $panton_expense, $lacquer_glossy_price, $lacquer_glossy_currency, $lacquer_glossy_expense, $lacquer_matte_price, $lacquer_matte_currency, $lacquer_matte_expense, $lacquer_selective_price, $lacquer_selective_currency, $lacquer_selective_expense, $solvent_etoxipropanol_price, $solvent_etoxipropanol_currency, $solvent_flexol82_price, $solvent_flexol82_currency, $solvent_part, $min_price_per_ink, $self_adhesive_laquer_price, $self_adhesive_laquer_currency, $self_adhesive_laquer_expense, $min_percent) {
+        $this->c_price = $c_price;
+        $this->c_currency = $c_currency;
+        $this->c_expense = $c_expense;
+        $this->m_price = $m_price;
+        $this->m_currency = $m_currency;
+        $this->m_expense = $m_expense;
+        $this->y_price = $y_price;
+        $this->y_currency = $y_currency;
+        $this->y_expense = $y_expense;
+        $this->k_price = $k_price;
+        $this->k_currency = $k_currency;
+        $this->k_expense = $k_expense;
+        $this->white_price = $white_price;
+        $this->white_currency = $white_currency;
+        $this->white_expense = $white_expense;
+        $this->panton_price = $panton_price;
+        $this->panton_currency = $panton_currency;
+        $this->panton_expense = $panton_expense;
+        $this->lacquer_glossy_price = $lacquer_glossy_price;
+        $this->lacquer_glossy_currency = $lacquer_glossy_currency;
+        $this->lacquer_glossy_expense = $lacquer_glossy_expense;
+        $this->lacquer_matte_price = $lacquer_matte_price;
+        $this->lacquer_matte_currency = $lacquer_matte_currency;
+        $this->lacquer_matte_expense = $lacquer_matte_expense;
+        $this->lacquer_selective_price = $lacquer_selective_price;
+        $this->lacquer_selective_currency = $lacquer_selective_currency;
+        $this->lacquer_selective_expense = $lacquer_selective_expense;
+        $this->solvent_etoxipropanol_price = $solvent_etoxipropanol_price;
+        $this->solvent_etoxipropanol_currency = $solvent_etoxipropanol_currency;
+        $this->solvent_flexol82_price = $solvent_flexol82_price;
+        $this->solvent_flexol82_currency = $solvent_flexol82_currency;
+        $this->solvent_part = $solvent_part;
+        $this->min_price_per_ink = $min_price_per_ink;
+        $this->self_adhesive_laquer_price = $self_adhesive_laquer_price;
+        $this->self_adhesive_laquer_currency = $self_adhesive_laquer_currency;
+        $this->self_adhesive_laquer_expense = $self_adhesive_laquer_expense;
+        $this->min_percent = $min_percent;
+    }
+}
+
+// Данные по клею
+class DataGlue {
+    public $glue_price; // Клей, цена
+    public $glue_currency; // Клей, валюта
+    public $glue_expense; // Клей, расход
+    public $glue_expense_pet; // Клей, расход (ламинация ПЭТ)
+    public $solvent_price; // Растворитель, цена
+    public $solvent_currency; // Растворитель, валюта
+    public $solvent_part; // Расход растворителя на 1 кг клея
+    
+    // Конструктор
+    public function __construct($glue_price, $glue_currency, $glue_expense, $glue_expense_pet, $solvent_price, $solvent_currency, $solvent_part) {
+        $this->glue_price = $glue_price;
+        $this->glue_currency = $glue_currency;
+        $this->glue_expense = $glue_expense;
+        $this->glue_expense_pet = $glue_expense_pet;
+        $this->solvent_price = $solvent_price;
+        $this->solvent_currency = $solvent_currency;
+        $this->solvent_part = $solvent_part;
+    }
+}
+
+// Данные по формам
+class DataCliche {
+    public $flint_price; // Флинт, цена
+    public $flint_currency; // Флинт, валюта
+    public $kodak_price; // Кодак, цена
+    public $kodak_currency; // Кодак, валюта
+    public $scotch_price; // Скотч, цена
+    public $scotch_currency; // Скотч, валюта
+    
+    // Конструктор
+    public function __construct($flint_price, $flint_currency, $kodak_price, $kodak_currency, $scotch_price, $scotch_currency) {
+        $this->flint_price = $flint_price;
+        $this->flint_currency = $flint_currency;
+        $this->kodak_price = $kodak_price;
+        $this->kodak_currency = $kodak_currency;
+        $this->scotch_price = $scotch_price;
+        $this->scotch_currency = $scotch_currency;
+    }
+}
+
+// Цена вместе с валютой
+class DataPrice {
+    public $value; // цена
+    public $currency; // валюта
+    
+    // Конструктор
+    public function __construct($value, $currency) {
+        $this->value = $value;
+        $this->currency = $currency;
+    }
+}
+
+// Наценка вместе с типом наценки, минимальным и максимальным весом
+class DataExtracharge {
+    public $value; // наценка
+    public $ech_type; // тип наценкт
+    public $min_weight; // минимальный вес
+    public $max_weight; // максимальный вес
+    
+    // Конструктор
+    public function __construct($value, $ech_type, $min_weight, $max_weight) {
+        $this->value = $value;
+        $this->ech_type = $ech_type;
+        $this->min_weight = $min_weight;
+        $this->max_weight = $max_weight;
+    }
+}
+
+// Базовый класс для классов расчёта
+class CalculationBase {
+    // Исходные величины для вычислений
+    public $data_priladka, $data_priladka_laminator, $data_machine, $data_gap, $data_laminator, $data_ink, $data_glue, $data_cliche, $data_extracharge, 
+            $usd, $euro, $weight_cut, $length_cut,
+            
+            $date, $customer_id, $name, $unit, $quantity, $quantities, $work_type_id,
+            $film_1, $thickness_1, $density_1, $price_1, $currency_1, $eco_price_1, $eco_currency_1, $customers_material_1, $ski_1, $width_ski_1,
+            $film_2, $thickness_2, $density_2, $price_2, $currency_2, $eco_price_2, $eco_currency_2, $customers_material_2, $ski_2, $width_ski_2,
+            $film_3, $thickness_3, $density_3, $price_3, $currency_3, $eco_price_3, $eco_currency_3, $customers_material_3, $ski_3, $width_ski_3,
+            $machine_id, $laminator_id, $length, $stream_width, $stream_widths, $streams_number, $raport, $number_in_raport, $lamination_roller_width, $ink_number, $ink_run2_number, $manager_id,
+            
+            $ink_1, $ink_2, $ink_3, $ink_4, $ink_5, $ink_6, $ink_7, $ink_8, 
+            $color_1, $color_2, $color_3, $color_4, $color_5, $color_6, $color_7, $color_8, 
+            $cmyk_1, $cmyk_2, $cmyk_3, $cmyk_4, $cmyk_5, $cmyk_6, $cmyk_7, $cmyk_8, 
+            $lacquer_1, $lacquer_2, $lacquer_3, $lacquer_4, $lacquer_5, $lacquer_6, $lacquer_7, $lacquer_8, 
+            $percent_1, $percent_2, $percent_3, $percent_4, $percent_5, $percent_6, $percent_7, $percent_8, 
+            $cliche_1, $cliche_2, $cliche_3, $cliche_4, $cliche_5, $cliche_6, $cliche_7, $cliche_8, 
+            
+            $ink_run2_1, $ink_run2_2, $ink_run2_3, $ink_run2_4, 
+            $color_run2_1, $color_run2_2, $color_run2_3, $color_run2_4, 
+            $cmyk_run2_1, $cmyk_run2_2, $cmyk_run2_3, $cmyk_run2_4, 
+            $lacquer_run2_1, $lacquer_run2_2, $lacquer_run2_3, $lacquer_run2_4, 
+            $percent_run2_1, $percent_run2_2, $percent_run2_3, $percent_run2_4, 
+            $cliche_run2_1, $cliche_run2_2, $cliche_run2_3, $cliche_run2_4, 
+            
+            $cliche_in_price, $cliches_count_flint, $cliches_count_kodak, $cliches_count_old, $extracharge, $extracharge_cliche, $customer_pays_for_cliche,
+            $knife, $extracharge_knife, $knife_in_price, $customer_pays_for_knife, $extra_expense, 
+            $requirement1, $requirement2, $requirement3, $cut_priladka, 
+            $customer, $last_name, $first_name, $status_id, $status_comment, $status_date, $num_for_customer;
+    
+    // Конструктор
+    public function __construct(DataPriladka $data_priladka, 
+            DataPriladka $data_priladka_laminator,
+            DataMachine $data_machine,
+            DataGap $data_gap,
+            DataLaminator $data_laminator,
+            DataInk $data_ink,
+            DataGlue $data_glue,
+            DataCliche $data_cliche,
+            array $data_extracharge,
+            $usd, // Курс доллара
+            $euro, // Курс евро
+            $weight_cut, // Сколько нарезано в кг
+            $length_cut, // Сколько нарезано в м
+            
+            $date, // Дата
+            $customer_id, // ID заказчика
+            $name, // Наименование
+            $unit, // Кг или шт
+            $quantity, // Размер тиража в кг или шт
+            array $quantities, // Размер тиража в шт
+            $work_type_id, // Тип работы: с печатью или без печати
+        
+            $film_1, // Основная пленка, марка
+            $thickness_1, // Основная пленка, толщина, мкм
+            $density_1, // Основная пленка, плотность, г/м2
+            $price_1, // Основная пленка, цена
+            $currency_1, // Основная пленка, валюта
+            $eco_price_1, // Основная пленка, экосбор
+            $eco_currency_1, // Основная пленка, валюта экосбора
+            $customers_material_1, // Основная плёнка, другая, материал заказчика
+            $ski_1, // Основная пленка, лыжи
+            $width_ski_1, // Основная пленка, ширина пленки, мм
+        
+            $film_2, // Ламинация 1, марка
+            $thickness_2, // Ламинация 1, толщина, мкм
+            $density_2, // Ламинация 1, плотность, г/м2
+            $price_2, // Ламинация 1, цена
+            $currency_2, // Ламинация 1, валюта
+            $eco_price_2, // Ламинация 2, цена
+            $eco_currency_2, // Ламинация 2, валюта экосбора
+            $customers_material_2, // Ламинация 1, другая, материал заказчика
+            $ski_2, // Ламинация 1, лыжи
+            $width_ski_2, // Ламинация 1, ширина пленки, мм
+        
+            $film_3, // Ламинация 2, марка
+            $thickness_3, // Ламинация 2, толщина, мкм
+            $density_3, // Ламинация 2, плотность, г/м2
+            $price_3, // Ламинация 2, цена
+            $currency_3, // Ламинация 2, валюта
+            $eco_price_3, // Ламинация 2, цена
+            $eco_currency_3, // Ламинация 2, валюта экосбора
+            $customers_material_3, // Ламинация 2, другая, уд. вес
+            $ski_3, // Ламинация 2, лыжи
+            $width_ski_3,  // Ламинация 2, ширина пленки, мм
+        
+            $machine_id, // ID машина
+            $laminator_id, // ID ламинатора
+            $length, // Длина этикетки, мм
+            $stream_width, // Ширина ручья, мм
+            array $stream_widths, // Ширины ручья, мм, если они неодинаковые
+            $streams_number, // Количество ручьёв
+            $raport, // Рапорт
+            $number_in_raport, // Количество этикеток в рапорте
+            $lamination_roller_width, // Ширина ламинирующего вала
+            $ink_number, // Красочность
+            $ink_run2_number, // Красочность, второй прогон
+            $manager_id, // ID менеджера
+            
+            $ink_1, $ink_2, $ink_3, $ink_4, $ink_5, $ink_6, $ink_7, $ink_8, // Тип краски (CMYK, пантон, белая, лак)
+            $color_1, $color_2, $color_3, $color_4, $color_5, $color_6, $color_7, $color_8, // Номер пантона
+            $cmyk_1, $cmyk_2, $cmyk_3, $cmyk_4, $cmyk_5, $cmyk_6, $cmyk_7, $cmyk_8, // Тип CMYK (cyan, magenda, yellow, kontur)
+            $lacquer_1, $lacquer_2, $lacquer_3, $lacquer_4, $lacquer_5, $lacquer_6, $lacquer_7, $lacquer_8, // Тип лака (глянцевый, матовый)
+            $percent_1, $percent_2, $percent_3, $percent_4, $percent_5, $percent_6, $percent_7, $percent_8, // Процент данной краски
+            $cliche_1, $cliche_2, $cliche_3, $cliche_4, $cliche_5, $cliche_6, $cliche_7, $cliche_8, // Форма (старая, Флинт, Кодак)
+            
+            $ink_run2_1, $ink_run2_2, $ink_run2_3, $ink_run2_4, // Тип краски, второй прогон
+            $color_run2_1, $color_run2_2, $color_run2_3, $color_run2_4, // Номер пантона, второй прогон
+            $cmyk_run2_1, $cmyk_run2_2, $cmyk_run2_3, $cmyk_run2_4, // Тип CMYK, второй прогон
+            $lacquer_run2_1, $lacquer_run2_2, $lacquer_run2_3, $lacquer_run2_4, // Тип лака, второй прогон
+            $percent_run2_1, $percent_run2_2, $percent_run2_3, $percent_run2_4, // Процент данной краски, второй прогон
+            $cliche_run2_1, $cliche_run2_2, $cliche_run2_3, $cliche_run2_4, // Форма, второй прогон
+            
+            $cliche_in_price, // Включить ПФ в себестоимость
+            $cliches_count_flint, // Количество форм Флинт
+            $cliches_count_kodak, // Количество форм Кодак
+            $cliches_count_old, // Количество старых форм
+            $extracharge, // Наценка на тираж
+            $extracharge_cliche, // Наценка на ПФ
+            $customer_pays_for_cliche, // Заказчик платит за ПФ
+            $knife, // Стоимость ножа
+            $extracharge_knife, // Наценка на нож
+            $knife_in_price, // Нож включается в стоимость
+            $customer_pays_for_knife, // Заказчик платит за нож
+            $extra_expense, // Дополнительные расходы с кг/шт
+            
+            $requirement1, // Требование по материалу 1
+            $requirement2, // Требование по материалу 2
+            $requirement3, // Требование по материалу 3
+            $cut_priladka, // Приладка на резке
+            
+            $customer, // Заказчик
+            $last_name, // Фамилия менеджера
+            $first_name, // Имя менеджера
+            $status_id, // Статус
+            $status_comment, // Комментарий к статусу
+            $status_date, // Дата установления статуса
+            $num_for_customer // Номер заказа у данного заказчика
+            ) {
+        $this->data_priladka = $data_priladka;
+        $this->data_priladka_laminator = $data_priladka_laminator;
+        $this->data_machine = $data_machine;
+        $this->data_gap = $data_gap;
+        $this->data_laminator = $data_laminator;
+        $this->data_ink = $data_ink;
+        $this->data_glue = $data_glue;
+        $this->data_cliche = $data_cliche;
+        $this->data_extracharge = $data_extracharge;
+        $this->usd = $usd; // Курс доллара
+        $this->euro = $euro; // Курс евро
+        $this->weight_cut = $weight_cut; // Сколько нарезано в кг
+        $this->length_cut = $length_cut; // Сколько нарезано в м
+        
+        $this->date = $date; // Дата
+        $this->customer_id = $customer_id; // ID заказчика
+        $this->name = $name; // Наименование
+        $this->unit = $unit; // Кг или шт
+        $this->quantity = $quantity; // Размер тиража в кг или шт
+        $this->quantities = $quantities; // Размер тиража в шт
+        $this->work_type_id = $work_type_id; // Тип работы: с печатью или без печати
+        
+        $this->film_1 = $film_1; // Основная пленка, марка
+        $this->thickness_1 = $thickness_1; // Основная пленка, толщина, мкм
+        $this->density_1 = $density_1; // Основная пленка, плотность, г/м2
+        $this->price_1 = $price_1; // Основная пленка, цена
+        $this->currency_1 = $currency_1; // Основная пленка, валюта
+        $this->eco_price_1 = $eco_price_1; // Основная пленка, экосбор
+        $this->eco_currency_1 = $eco_currency_1; // Основная пленка, валюта экосбора
+        $this->customers_material_1 = $customers_material_1; // Основная плёнка, другая, материал заказчика
+        $this->ski_1 = $ski_1; // Основная пленка, лыжи
+        $this->width_ski_1 = $width_ski_1; // Основная пленка, ширина пленки, мм
+        
+        $this->film_2 = $film_2; // Ламинация 1, марка
+        $this->thickness_2 = $thickness_2; // Ламинация 1, толщина, мкм
+        $this->density_2 = $density_2; // Ламинация 1, плотность, г/м2
+        $this->price_2 = $price_2; // Ламинация 1, цена
+        $this->currency_2 = $currency_2; // Ламинация 1, валюта
+        $this->eco_price_2 = $eco_price_2; // Ламинация 2, экосбор
+        $this->eco_currency_2 = $eco_currency_2; // Ламинация 2, валюта экосбора
+        $this->customers_material_2 = $customers_material_2; // Ламинация 1, другая, материал заказчика
+        $this->ski_2 = $ski_2; // Ламинация 1, лыжи
+        $this->width_ski_2 = $width_ski_2; // Ламинация 1, ширина пленки, мм
+        
+        $this->film_3 = $film_3; // Ламинация 2, марка
+        $this->thickness_3 = $thickness_3; // Ламинация 2, толщина, мкм
+        $this->density_3 = $density_3; // Ламинация 2, плотность, г/м2
+        $this->price_3 = $price_3; // Ламинация 2, цена
+        $this->currency_3 = $currency_3; // Ламинация 2, валюта
+        $this->eco_price_3 = $eco_price_3; // Ламинация 2, экосбор
+        $this->eco_currency_3 = $eco_currency_3; // Ламинация 2, валюта экосбора
+        $this->customers_material_3 = $customers_material_3; // Ламинация 2, другая, уд. вес
+        $this->ski_3 = $ski_3; // Ламинация 2, лыжи
+        $this->width_ski_3 = $width_ski_3;  // Ламинация 2, ширина пленки, мм
+        
+        $this->machine_id = $machine_id; // ID машины
+        $this->laminator_id = $laminator_id; // ID ламинатора
+        $this->length = $length; // Длина этикетки, мм
+        $this->stream_width = $stream_width; // Ширина ручья, мм
+        $this->stream_widths = $stream_widths; // Ширины ручьёв, мм, если они неодинаковые
+        $this->streams_number = $streams_number; // Количество ручьёв
+        $this->raport = $raport; // Рапорт
+        $this->number_in_raport = $number_in_raport; // Кол-во этикеток в рапорте
+        $this->lamination_roller_width = $lamination_roller_width; // Ширина ламинирующего вала
+        $this->ink_number = $ink_number; // Красочность
+        $this->ink_run2_number = $ink_run2_number; // Красочность, второй прогон
+        $this->manager_id = $manager_id; // ID менелдера
+        
+        $this->ink_1 = $ink_1; $this->ink_2 = $ink_2; $this->ink_3 = $ink_3; $this->ink_4 = $ink_4; $this->ink_5 = $ink_5; $this->ink_6 = $ink_6; $this->ink_7 = $ink_7; $this->ink_8 = $ink_8; // Тип краски (CMYK, пантон, белая, лак)
+        $this->color_1 = $color_1; $this->color_2 = $color_2; $this->color_3 = $color_3; $this->color_4 = $color_4; $this->color_5 = $color_5; $this->color_6 = $color_6; $this->color_7 = $color_7; $this->color_8 = $color_8; // Номер пантона
+        $this->cmyk_1 = $cmyk_1; $this->cmyk_2 = $cmyk_2; $this->cmyk_3 = $cmyk_3; $this->cmyk_4 = $cmyk_4; $this->cmyk_5 = $cmyk_5; $this->cmyk_6 = $cmyk_6; $this->cmyk_7 = $cmyk_7; $this->cmyk_8 = $cmyk_8; // Тип CMYK (cyan, magenda, yellow, kontur)
+        $this->lacquer_1 = $lacquer_1; $this->lacquer_2 = $lacquer_2; $this->lacquer_3 = $lacquer_3; $this->lacquer_4 = $lacquer_4; $this->lacquer_5 = $lacquer_5; $this->lacquer_6 = $lacquer_6; $this->lacquer_7 = $lacquer_7; $this->lacquer_8 = $lacquer_8; // Тип лака (глянцевый, матовый)
+        $this->percent_1 = $percent_1; $this->percent_2 = $percent_2; $this->percent_3 = $percent_3; $this->percent_4 = $percent_4; $this->percent_5 = $percent_5; $this->percent_6 = $percent_6; $this->percent_7 = $percent_7; $this->percent_8 = $percent_8; // Процент данной краски
+        $this->cliche_1 = $cliche_1; $this->cliche_2 = $cliche_2; $this->cliche_3 = $cliche_3; $this->cliche_4 = $cliche_4; $this->cliche_5 = $cliche_5; $this->cliche_6 = $cliche_6; $this->cliche_7 = $cliche_7; $this->cliche_8 = $cliche_8; // Форма (старая, Флинт, Кодак)
+        
+        $this->ink_run2_1 = $ink_run2_1; $this->ink_run2_2 = $ink_run2_2; $this->ink_run2_3 = $ink_run2_3; $this->ink_run2_4 = $ink_run2_4; // Тип краски, второй прогон
+        $this->color_run2_1 = $color_run2_1; $this->color_run2_2 = $color_run2_2; $this->color_run2_3 = $color_run2_3; $this->color_run2_4 = $color_run2_4; // Номер пантона, второй прогон
+        $this->cmyk_run2_1 = $cmyk_run2_1; $this->cmyk_run2_2 = $cmyk_run2_2; $this->cmyk_run2_3 = $cmyk_run2_3; $this->cmyk_run2_4 = $cmyk_run2_4; // Тип CMYK, второй прогон
+        $this->lacquer_run2_1 = $lacquer_run2_1; $this->lacquer_run2_2 = $lacquer_run2_2; $this->lacquer_run2_3 = $lacquer_run2_3; $this->lacquer_run2_4 = $lacquer_run2_4; // Тип лака, второй прогон
+        $this->percent_run2_1 = $percent_run2_1; $this->percent_run2_2 = $percent_run2_2; $this->percent_run2_3 = $percent_run2_3; $this->percent_run2_4 = $percent_run2_4; // Процент данной краски, второй прогон
+        $this->cliche_run2_1 = $cliche_run2_1; $this->cliche_run2_2 = $cliche_run2_2; $this->cliche_run2_3 = $cliche_run2_3; $this->cliche_run2_4 = $cliche_run2_4; // Форма, второй прогон
+        
+        $this->cliche_in_price = $cliche_in_price; // Включить ПФ в себестоимость
+        $this->cliches_count_flint = $cliches_count_flint; // Количество форм Флинт
+        $this->cliches_count_kodak = $cliches_count_kodak; // Количество форм Кодак
+        $this->cliches_count_old = $cliches_count_old; // Количество старых форм
+        $this->extracharge = $extracharge; // Наценка на тираж
+        $this->extracharge_cliche = $extracharge_cliche; // Наценка на ПФ
+        $this->customer_pays_for_cliche = $customer_pays_for_cliche; // Заказчик платит за ПФ
+        $this->knife = $knife; // Стоимость ножа
+        $this->extracharge_knife = $extracharge_knife; // Наценка на нож
+        $this->knife_in_price = $knife_in_price; // Нож включается в стоимость
+        $this->customer_pays_for_knife = $customer_pays_for_knife; // Заказчик платит за нож
+        $this->extra_expense = $extra_expense; // Дополнительные расходы
+        
+        $this->requirement1 = $requirement1; // Требования по материалу 1
+        $this->requirement2 = $requirement2; // Требования по материалу 2
+        $this->requirement3 = $requirement3; // Требования по материалу 3
+        $this->cut_priladka = $cut_priladka; // Приладка на резке
+        
+        $this->customer = $customer; // Заказчик
+        $this->last_name = $last_name; // Фамилия менеджера
+        $this->first_name = $first_name; // Имя менеджера
+        $this->status_id = $status_id; // Статус
+        $this->status_comment = $status_comment; // Комментарий к статусу
+        $this->status_date = $status_date; // Дата установления статуса
+        $this->num_for_customer = $num_for_customer; // Номер заказа у данного заказчика
+    }
+    
+    // Получения курса валюты (get - функция получения)
+    public static function GetCurrencyRate($currency, $usd, $euro) {
+        switch($currency) {
+            case CURRENCY_USD:
+                return $usd;
+            
+            case CURRENCY_EURO:
+                return $euro;
+            
+            default :
+                return 1;
+        }
+    }
+    
+    // Получение цены на краску
+    function GetInkPrice($ink, $cmyk, $lacquer, $c_price, $c_currency, $m_price, $m_currency, $y_price, $y_currency, $k_price, $k_currency, $panton_price, $panton_currency, $white_price, $white_currency, $lacquer_glossy_price, $lacquer_glossy_currency, $lacquer_matte_price, $lacquer_matte_currency, $lacquer_selective_price, $lacquer_selective_currency) {
+        switch ($ink) {
+            case INK_CMYK:
+                switch ($cmyk) {
+                    case CMYK_CYAN:
+                        return new DataPrice($c_price, $c_currency);
+                        
+                    case CMYK_MAGENDA:
+                        return new DataPrice($m_price, $m_currency);
+                        
+                    case CMYK_YELLOW:
+                        return new DataPrice($y_price, $y_currency);
+                        
+                    case CMYK_KONTUR:
+                        return new DataPrice($k_price, $k_currency);
+                        
+                    default :
+                        return null;
+                }
+                
+            case INK_PANTON:
+                return new DataPrice($panton_price, $panton_currency);
+                
+            case INK_WHITE:
+                return new DataPrice($white_price, $white_currency);
+                
+            case INK_LACQUER:
+                switch ($lacquer) {
+                    case LACQUER_MATTE:
+                        return new DataPrice($lacquer_matte_price, $lacquer_matte_currency);
+                        
+                    case LACQUER_SELECTIVE:
+                        return new DataPrice($lacquer_selective_price, $lacquer_selective_currency);
+                        
+                    default :
+                        return new DataPrice($lacquer_glossy_price, $lacquer_glossy_currency);
+                }
+                
+            default :
+                return null;
+        }
+    }
+    
+    // Получение расхода краски
+    function GetInkExpense($ink, $cmyk, $lacquer, $c_expense, $m_expense, $y_expense, $k_expense, $panton_expense, $white_expense, $lacquer_glossy_expense, $lacquer_matte_expense, $lacquer_selective_expense) {
+        switch ($ink) {
+            case INK_CMYK:
+                switch ($cmyk) {
+                    case CMYK_CYAN:
+                        return $c_expense;
+                        
+                    case CMYK_MAGENDA:
+                        return $m_expense;
+                        
+                    case CMYK_YELLOW:
+                        return $y_expense;
+                        
+                    case CMYK_KONTUR:
+                        return $k_expense;
+                }
+            case INK_PANTON:
+                return $panton_expense;
+                
+            case INK_WHITE:
+                return $white_expense;
+                
+            case INK_LACQUER:
+                switch($lacquer) {
+                    case LACQUER_MATTE:
+                        return $lacquer_matte_expense;
+                        
+                    case LACQUER_SELECTIVE:
+                        return $lacquer_selective_expense;
+                        
+                    default :
+                        return $lacquer_glossy_expense;
+                }
+                
+            default :
+                return null;
+        }
+    }
+    
+    // Получение типа лыж
+    function GetSkiName($ski) {
+        switch ($ski) {
+            case SKI_NO:
+                return "Без лыж";
+            case SKI_STANDARD:
+                return "Стандартные лыжи";
+            case SKI_NONSTANDARD:
+                return "Нестандартные лыжи";
+            default :
+                return "Неизвестно";
+        }
+    }
+    
+    // Получение имени краски
+    function GetInkName($ink) {
+        switch ($ink) {
+            case INK_CMYK:
+                return "CMYK";
+            case INK_PANTON:
+                return "Пантон";
+            case INK_WHITE:
+                return "Белая";
+            case INK_LACQUER:
+                return "Лак";
+            default :
+                return "Неизвестная";
+        }
+    }
+    
+    // Получения типа формы
+    function GetClicheName($cliche) {
+        switch ($cliche) {
+            case CLICHE_OLD:
+                return "старая";
+            case CLICHE_FLINT:
+                return "новая Флинт";
+            case CLICHE_KODAK:
+                return "новая Кодак";
+            case Calculation::TVER:
+                return "новая Тверь";
+            default :
+                return "Неизвестная";
+        }
+    }
+    
+    // Получение называния единицы размера тиража
+    function GetUnitName($unit) {
+        switch ($unit) {
+            case KG:
+                return "кг";
+            case PIECES:
+                return "шт";
+            default :
+                return "";
+        }
+    }
+    
+    // Получение названия валюты
+    function GetCurrencyName($currency) {
+        switch ($currency) {
+            case CURRENCY_USD:
+                return "USD";
+            case CURRENCY_EURO:
+                return "евро";
+            default :
+                return "руб";
+        }
+    }
+    
+    // Подготовка параметров для конструктора класса расчёта
+    // и создание объекта расчёта
+    public static function Create($id) {
+        // ПОЛУЧЕНИЕ ИСХОДНЫХ ДАННЫХ
+        $date = null;
+        $customer_id = null;
+        $name = null;
+        $unit = null; // Кг или шт
+        $quantity = null; // Размер тиража
+        $work_type_id = null; // Типа работы: с печатью или без печати
+        
+        $film_1 = null; // Основная пленка, марка
+        $thickness_1 = null; // Основная пленка, толщина, мкм
+        $density_1 = null; // Основная пленка, плотность, г/м2
+        $price_1 = null; // Основная пленка, цена
+        $currency_1 = null; // Основная пленка, валюта
+        $eco_price_1 = null; // Основная пленка, экосбор
+        $eco_currency_1 = null; // Основная пленка, валюта экосбора
+        $customers_material_1 = null; // Основная плёнка, другая, материал заказчика
+        $ski_1 = null; // Основная пленка, лыжи
+        $width_ski_1 = null; // Основная пленка, ширина пленки, мм
+        
+        $film_2 = null; // Ламинация 1, марка
+        $thickness_2 = null; // Ламинация 1, толщина, мкм
+        $density_2 = null; // Ламинация 1, плотность, г/м2
+        $price_2 = null; // Ламинация 1, цена
+        $currency_2 = null; // Ламинация 1, валюта
+        $eco_price_2 = null; // Ламинация 1, цена
+        $eco_currency_2 = null; // Ламинация 1, валюта экосбора
+        $customers_material_2 = null; // Ламинация 1, другая, материал заказчика
+        $ski_2 = null; // Ламинация 1, лыжи
+        $width_ski_2 = null; // Ламинация 1, ширина пленки, мм
+        
+        $film_3 = null; // Ламинация 2, марка
+        $thickness_3 = null; // Ламинация 2, толщина, мкм
+        $density_3 = null; // Ламинация 2, плотность, г/м2
+        $price_3 = null; // Ламинация 2, цена
+        $currency_3 = null; // Ламинация 2, валюта
+        $eco_price_3 = null; // Ламинация 2, экосбор
+        $eco_currency_3 = null; // Ламинация 2, валюта экосбора
+        $customers_material_3 = null; // Ламинация 2, другая, уд. вес
+        $ski_3 = null; // Ламинация 2, лыжи
+        $width_ski_3 = null;  // Ламинация 2, ширина пленки, мм
+        
+        $machine_id = null;
+        $laminator_id = null;
+        $length = null; // Длина этикетки, мм
+        $stream_width = null; // Ширина ручья, мм (если плёнка с печатью)
+        $streams_number = null; // Количество ручьёв
+        $raport = null; // Рапорт
+        $number_in_raport = null; // Кол-во этикеток в рапорте
+        $lamination_roller_width = null; // Ширина ламинирующего вала
+        $ink_number = 0; // Красочность
+        $ink_run2_number = 0; // Красочность, второй прогон
+        $manager_id = null; // ID менеджера
+        
+        $cliche_in_price = null; // Включить формы в стоимость
+        $extracharge = null; // Наценка на тираж
+        $extracharge_cliche = null; // Наценка на ПФ
+        $customer_pays_for_cliche = null; // Заказчик платит за ПФ
+        $extra_expense = null; // Дополнительные расходы с кг/шт
+        
+        $requirement1 = null; // Требования по материалу 1
+        $requirement2 = null; // Требования по материалу 2
+        $requirement3 = null; // Требования по материалу 3
+        $cut_priladka = null; // Приладка на резке
+        
+        $customer = null; // Заказчик
+        $last_name = null; // Фамилия менеджера
+        $first_name = null; // Имя менеджера
+        $status_id = null; // Статус
+        $status_comment = ''; // Комментарий к статусу
+        $status_date = null; // Дата установления статуса
+        $num_for_customer = null; // Номер заказа у данного заказчика
+        
+        $sql = "select rc.date, rc.customer_id, rc.name, rc.unit, rc.quantity, rc.work_type_id, "
+                . "f.name film, fv.thickness thickness, fv.weight density, "
+                . "rc.film_variation_id, rc.price, rc.currency, rc.individual_film_name, rc.individual_thickness, rc.individual_density, "
+                . "rc.customers_material, rc.ski, rc.width_ski, "
+                . "lamination1_f.name lamination1_film, lamination1_fv.thickness lamination1_thickness, lamination1_fv.weight lamination1_density, "
+                . "rc.lamination1_film_variation_id, rc.lamination1_price, rc.lamination1_currency, rc.lamination1_individual_film_name, rc.lamination1_individual_thickness, rc.lamination1_individual_density, "
+                . "rc.lamination1_customers_material, rc.lamination1_ski, rc.lamination1_width_ski, "
+                . "lamination2_f.name lamination2_film, lamination2_fv.thickness lamination2_thickness, lamination2_fv.weight lamination2_density, "
+                . "rc.lamination2_film_variation_id, rc.lamination2_price, rc.lamination2_currency, rc.lamination2_individual_film_name, rc.lamination2_individual_thickness, rc.lamination2_individual_density, "
+                . "rc.lamination2_customers_material, rc.lamination2_ski, rc.lamination2_width_ski, "
+                . "rc.machine_id, rc.laminator_id, rc.length, rc.stream_width, rc.streams_number, rc.raport, rc.number_in_raport, rc.lamination_roller_width, rc.ink_number, rc.ink_run2_number, rc.manager_id, "
+                . "rc.ink_1, rc.ink_2, rc.ink_3, rc.ink_4, rc.ink_5, rc.ink_6, rc.ink_7, rc.ink_8, "
+                . "rc.color_1, rc.color_2, rc.color_3, rc.color_4, rc.color_5, rc.color_6, rc.color_7, rc.color_8, "
+                . "rc.cmyk_1, rc.cmyk_2, rc.cmyk_3, rc.cmyk_4, rc.cmyk_5, rc.cmyk_6, rc.cmyk_7, rc.cmyk_8, "
+                . "rc.lacquer_1, rc.lacquer_2, rc.lacquer_3, rc.lacquer_4, rc.lacquer_5, rc.lacquer_6, rc.lacquer_7, rc.lacquer_8, "
+                . "rc.percent_1, rc.percent_2, rc.percent_3, rc.percent_4, rc.percent_5, rc.percent_6, rc.percent_7, rc.percent_8, "
+                . "rc.cliche_1, rc.cliche_2, rc.cliche_3, rc.cliche_4, rc.cliche_5, rc.cliche_6, rc.cliche_7, rc.cliche_8, "
+                . "rc.ink_run2_1, rc.ink_run2_2, rc.ink_run2_3, rc.ink_run2_4, "
+                . "rc.color_run2_1, rc.color_run2_2, rc.color_run2_3, rc.color_run2_4, "
+                . "rc.cmyk_run2_1, rc.cmyk_run2_2, rc.cmyk_run2_3, rc.cmyk_run2_4, "
+                . "rc.lacquer_run2_1, rc.lacquer_run2_2, rc.lacquer_run2_3, rc.lacquer_run2_4, "
+                . "rc.percent_run2_1, rc.percent_run2_2, rc.percent_run2_3, rc.percent_run2_4, "
+                . "rc.cliche_run2_1, rc.cliche_run2_2, rc.cliche_run2_3, rc.cliche_run2_4, "
+                . "rc.cliche_in_price, rc.cliches_count_flint, rc.cliches_count_kodak, rc.cliches_count_old, rc.extracharge, rc.extracharge_cliche, rc.customer_pays_for_cliche, "
+                . "rc.knife, rc.extracharge_knife, rc.knife_in_price, rc.customer_pays_for_knife, rc.extra_expense, "
+                . "rc.requirement1, rc.requirement2, rc.requirement3, rc.cut_priladka, "
+                . "cus.name customer, u.last_name, u.first_name, "
+                . "(select status_id from calculation_status_history where calculation_id = rc.id order by date desc limit 1) status_id, "
+                . "(select comment from calculation_status_history where calculation_id = rc.id order by date desc limit 1) status_comment, "
+                . "(select date from calculation_status_history where calculation_id = rc.id order by date desc limit 1) status_date, "
+                . "(select count(id) from calculation where customer_id = rc.customer_id and id <= rc.id) num_for_customer "
+                . "from calculation rc "
+                . "left join film_variation fv on rc.film_variation_id = fv.id "
+                . "left join film f on fv.film_id = f.id "
+                . "left join film_variation lamination1_fv on rc.lamination1_film_variation_id = lamination1_fv.id "
+                . "left join film lamination1_f on lamination1_fv.film_id = lamination1_f.id "
+                . "left join film_variation lamination2_fv on rc.lamination2_film_variation_id = lamination2_fv.id "
+                . "left join film lamination2_f on lamination2_fv.film_id = lamination2_f.id "
+                . "left join customer cus on rc.customer_id = cus.id "
+                . "left join user u on rc.manager_id = u.id "
+                . "where rc.id = $id";
+        $fetcher = new Fetcher($sql);
+        
+        if ($row = $fetcher->Fetch()) {
+            $date = $row['date'];
+            $customer_id = $row['customer_id'];
+            $name = $row['name'];
+            
+            $unit = $row['unit']; // Кг или шт
+            $quantity = $row['quantity']; // Размер тиража в кг или шт
+            $work_type_id = $row['work_type_id']; // Тип работы: с печатью или без печати
+            
+            if(!empty($row['film_variation_id'])) {
+                $film_1 = $row['film']; // Основная пленка, марка
+                $thickness_1 = $row['thickness']; // Основная пленка, толщина, мкм
+                $density_1 = $row['density']; // Основная пленка, плотность, г/м2
+            }
+            else {
+                $film_1 = $row['individual_film_name']; // Основная пленка, марка
+                $thickness_1 = $row['individual_thickness']; // Основная пленка, толщина, мкм
+                $density_1 = $row['individual_density']; // Основная пленка, плотность, г/м2
+            }
+            $price_1 = $row['price']; // Основная пленка, цена
+            $currency_1 = $row['currency']; // Основная пленка, валюта
+            $eco_price_1 = 0; // Основная пленка, экосбор
+            $eco_currency_1 = CURRENCY_RUB; // Основная пленка, валюта экосбора
+            $customers_material_1 = $row['customers_material']; // Основная плёнка, другая, материал заказчика
+            $ski_1 = $row['ski']; // Основная пленка, лыжи
+            $width_ski_1 = $row['width_ski']; // Основная пленка, ширина пленки, мм
+            
+            // Получаем сумму и валюту экосбора 1
+            if($customers_material_1 == true) {
+                $sql1 = "select price, currency from other_price where price_type = ".PRICE_ECO_CUSTOMERS_MATERIAL." and date <= '$date' order by id desc limit 1";
+                $fetcher1 = new Fetcher($sql1);
+                if($row1 = $fetcher1->Fetch()) {
+                    $eco_price_1 = $row1['price'];
+                    $eco_currency_1 = $row1['currency'];
+                }
+            }
+            elseif(!empty ($row['individual_film_name'])) {
+                $sql1 = "select price, currency from other_price where price_type = ".PRICE_ECO_OTHER_MATERIAL." and date <= '$date' order by id desc limit 1";
+                $fetcher1 = new Fetcher($sql1);
+                if($row1 = $fetcher1->Fetch()) {
+                    $eco_price_1 = $row1['price'];
+                    $eco_currency_1 = $row1['currency'];
+                }
+            }
+            elseif(!empty ($row['film_variation_id'])) {
+                $sql1 = "select eco_price, eco_currency from film_price where film_variation_id = ".$row['film_variation_id']." and date <= '$date' order by id desc limit 1";
+                $fetcher1 = new Fetcher($sql1);
+                if($row1 = $fetcher1->Fetch()) {
+                    $eco_price_1 = $row1['eco_price'];
+                    $eco_currency_1 = $row1['eco_currency'];
+                }
+            }
+            else {
+                $eco_price_1 = 0;
+                $eco_currency_1 = CURRENCY_RUB;
+            }
+            
+            if(!empty($row['lamination1_film_variation_id'])) {
+                $film_2 = $row['lamination1_film']; // Ламинация 1, марка
+                $thickness_2 = $row['lamination1_thickness']; // Ламинация 1, толщина, мкм
+                $density_2 = $row['lamination1_density']; // Ламинация 1, плотность, г/м2
+            }
+            else {
+                $film_2 = $row['lamination1_individual_film_name']; // Ламинация 1, марка
+                $thickness_2 = $row['lamination1_individual_thickness']; // Ламинация 1, толщина, мкм
+                $density_2 = $row['lamination1_individual_density']; // Ламинация 1, плотность, г/м2
+            }
+            $price_2 = $row['lamination1_price']; // Ламинация 1, цена
+            $currency_2 = $row['lamination1_currency']; // Ламинация 1, валюта
+            $eco_price_2 = 0; // Ламинация 2, экосбор
+            $eco_currency_2 = CURRENCY_RUB; // Ламинация 2, валюта экосбора
+            $customers_material_2 = $row['lamination1_customers_material']; // Ламинация 1, другая, материал заказчика
+            $ski_2 = $row['lamination1_ski']; // Ламинация 1, лыжи
+            $width_ski_2 = $row['lamination1_width_ski']; // Ламинация 1, ширина пленки, мм
+            
+            // Получаем сумму и валюту экосбора 2
+            if($customers_material_2 == true) {
+                $sql2 = "select price, currency from other_price where price_type = ".PRICE_ECO_CUSTOMERS_MATERIAL." and date <= '$date' order by id desc limit 1";
+                $fetcher2 = new Fetcher($sql2);
+                if($row2 = $fetcher2->Fetch()) {
+                    $eco_price_2 = $row2['price'];
+                    $eco_currency_2 = $row2['currency'];
+                }
+            }
+            elseif(!empty ($row['lamination1_individual_film_name'])) {
+                $sql2 = "select price, currency from other_price where price_type = ".PRICE_ECO_OTHER_MATERIAL." and date <= '$date' order by id desc limit 1";
+                $fetcher2 = new Fetcher($sql2);
+                if($row2 = $fetcher2->Fetch()) {
+                    $eco_price_2 = $row2['price'];
+                    $eco_currency_2 = $row2['currency'];
+                }
+            }
+            elseif(!empty ($row['lamination1_film_variation_id'])) {
+                $sql2 = "select eco_price, eco_currency from film_price where film_variation_id = ".$row['lamination1_film_variation_id']." and date <= '$date' order by id desc limit 1";
+                $fetcher2 = new Fetcher($sql2);
+                if($row2 = $fetcher2->Fetch()) {
+                    $eco_price_2 = $row2['eco_price'];
+                    $eco_currency_2 = $row2['eco_currency'];
+                }
+            }
+            else {
+                $eco_price_2 = 0;
+                $eco_currency_2 = CURRENCY_RUB;
+            }
+            
+            if(!empty($row['lamination2_film_variation_id'])) {
+                $film_3 = $row['lamination2_film']; // Ламинация 2, марка
+                $thickness_3 = $row['lamination2_thickness']; // Ламинация 2, толщина, мкм
+                $density_3 = $row['lamination2_density']; // Ламинация 2, плотность, г/м2
+            }
+            else {
+                $film_3 = $row['lamination2_individual_film_name']; // Ламинация 2, марка
+                $thickness_3 = $row['lamination2_individual_thickness']; // Ламинация 2, толщина, мкм
+                $density_3 = $row['lamination2_individual_density']; // Ламинация 2, плотность, г/м2
+            }
+            $price_3 = $row['lamination2_price']; // Ламинация 2, цена
+            $currency_3 = $row['lamination2_currency']; // Ламинация 2, валюта
+            $eco_price_3 = 0; // Ламинация 2, экосбор
+            $eco_currency_3 = CURRENCY_RUB; // Ламинация 3, валюта экосбора
+            $customers_material_3 = $row['lamination2_customers_material']; // Ламинация 2, другая, уд. вес
+            $ski_3 = $row['lamination2_ski']; // Ламинация 2, лыжи
+            $width_ski_3 = $row['lamination2_width_ski'];  // Ламинация 2, ширина пленки, мм
+            
+            // Получаем сумму и валюту экосбора 3
+            if($customers_material_3 == true) {
+                $sql3 = "select price, currency from other_price where price_type = ".PRICE_ECO_CUSTOMERS_MATERIAL." and date <= '$date' order by id desc limit 1";
+                $fetcher3 = new Fetcher($sql3);
+                if($row3 = $fetcher3->Fetch()) {
+                    $eco_price_3 = $row3['price'];
+                    $eco_currency_3 = $row3['currency'];
+                }
+            }
+            elseif(!empty ($row['lamination2_individual_film_name'])) {
+                $sql3 = "select price, currency from other_price where price_type = ".PRICE_ECO_OTHER_MATERIAL." and date <= '$date' order by id desc limit 1";
+                $fetcher3 = new Fetcher($sql3);
+                if($row3 = $fetcher3->Fetch()) {
+                    $eco_price_3 = $row3['price'];
+                    $eco_currency_3 = $row3['currency'];
+                }
+            }
+            elseif(!empty ($row['lamination2_film_variation_id'])) {
+                $sql3 = "select eco_price, eco_currency from film_price where film_variation_id = ".$row['lamination2_film_variation_id']." and date <= '$date' order by id desc limit 1";
+                $fetcher3 = new Fetcher($sql3);
+                if($row3 = $fetcher3->Fetch()) {
+                    $eco_price_3 = $row3['eco_price'];
+                    $eco_currency_3 = $row3['eco_currency'];
+                }
+            }
+            else {
+                $eco_price_3 = 0;
+                $eco_currency_3 = CURRENCY_RUB;
+            }
+            
+            $machine_id = $row['machine_id'];
+            $laminator_id = $row['laminator_id'];
+            $length = $row['length']; // Длина этикетки, мм
+            $stream_width = $row['stream_width']; // Ширина ручья, мм
+            $streams_number = $row['streams_number']; // Количество ручьёв
+            $raport = $row['raport']; // Рапорт
+            $number_in_raport = $row['number_in_raport']; // Кол-во этикеток в рапорте
+            $lamination_roller_width = $row['lamination_roller_width']; // Ширина ламинирующего вала
+            $ink_number = $row['ink_number']; // Красочность
+            $ink_run2_number = $row['ink_run2_number']; // Красочность, второй прогон
+            $manager_id = $row['manager_id']; // ID менеджера
+            
+            $ink_1 = $row['ink_1']; $ink_2 = $row['ink_2']; $ink_3 = $row['ink_3']; $ink_4 = $row['ink_4']; $ink_5 = $row['ink_5']; $ink_6 = $row['ink_6']; $ink_7 = $row['ink_7']; $ink_8 = $row['ink_8'];
+            $color_1 = $row['color_1']; $color_2 = $row['color_2']; $color_3 = $row['color_3']; $color_4 = $row['color_4']; $color_5 = $row['color_5']; $color_6 = $row['color_6']; $color_7 = $row['color_7']; $color_8 = $row['color_8'];
+            $cmyk_1 = $row['cmyk_1']; $cmyk_2 = $row['cmyk_2']; $cmyk_3 = $row['cmyk_3']; $cmyk_4 = $row['cmyk_4']; $cmyk_5 = $row['cmyk_5']; $cmyk_6 = $row['cmyk_6']; $cmyk_7 = $row['cmyk_7']; $cmyk_8 = $row['cmyk_8'];
+            $lacquer_1 = $row['lacquer_1']; $lacquer_2 = $row['lacquer_2']; $lacquer_3 = $row['lacquer_3']; $lacquer_4 = $row['lacquer_4']; $lacquer_5 = $row['lacquer_5']; $lacquer_6 = $row['lacquer_6']; $lacquer_7 = $row['lacquer_7']; $lacquer_8 = $row['lacquer_8'];
+            $percent_1 = $row['percent_1']; $percent_2 = $row['percent_2']; $percent_3 = $row['percent_3']; $percent_4 = $row['percent_4']; $percent_5 = $row['percent_5']; $percent_6 = $row['percent_6']; $percent_7 = $row['percent_7']; $percent_8 = $row['percent_8'];
+            $cliche_1 = $row['cliche_1']; $cliche_2 = $row['cliche_2']; $cliche_3 = $row['cliche_3']; $cliche_4 = $row['cliche_4']; $cliche_5 = $row['cliche_5']; $cliche_6 = $row['cliche_6']; $cliche_7 = $row['cliche_7']; $cliche_8 = $row['cliche_8'];
+            
+            $ink_run2_1 = $row['ink_run2_1']; $ink_run2_2 = $row['ink_run2_2']; $ink_run2_3 = $row['ink_run2_3']; $ink_run2_4 = $row['ink_run2_4'];
+            $color_run2_1 = $row['color_run2_1']; $color_run2_2 = $row['color_run2_2']; $color_run2_3 = $row['color_run2_3']; $color_run2_4 = $row['color_run2_4'];
+            $cmyk_run2_1 = $row['cmyk_run2_1']; $cmyk_run2_2 = $row['cmyk_run2_2']; $cmyk_run2_3 = $row['cmyk_run2_3']; $cmyk_run2_4 = $row['cmyk_run2_4'];
+            $lacquer_run2_1 = $row['lacquer_run2_1']; $lacquer_run2_2 = $row['lacquer_run2_2']; $lacquer_run2_3 = $row['lacquer_run2_3']; $lacquer_run2_4 = $row['lacquer_run2_4'];
+            $percent_run2_1 = $row['percent_run2_1']; $percent_run2_2 = $row['percent_run2_2']; $percent_run2_3 = $row['percent_run2_3']; $percent_run2_4 = $row['percent_run2_4'];
+            $cliche_run2_1 = $row['cliche_run2_1']; $cliche_run2_2 = $row['cliche_run2_2']; $cliche_run2_3 = $row['cliche_run2_3']; $cliche_run2_4 = $row['cliche_run2_4'];
+            
+            $cliche_in_price = $row['cliche_in_price']; // Включать стоимиость ПФ в тираж
+            $cliches_count_flint = $row['cliches_count_flint']; // Количество форм Флинт
+            $cliches_count_kodak = $row['cliches_count_kodak']; // Количество форм Кодак
+            $cliches_count_old = $row['cliches_count_old']; // Количество старых форм
+            $extracharge = $row['extracharge']; // Наценка на тираж
+            $extracharge_cliche = $row['extracharge_cliche']; // Наценка на ПФ
+            $customer_pays_for_cliche = $row['customer_pays_for_cliche']; // Заказчик платит за ПФ
+            
+            $knife = $row['knife']; // Стоимость ножа
+            $extracharge_knife = $row['extracharge_knife']; // Наценка на нож
+            $knife_in_price = $row['knife_in_price']; // Нож включен в себестоимость
+            $customer_pays_for_knife = $row['customer_pays_for_knife']; // Заказчик платит за нож
+            $extra_expense = $row['extra_expense']; // Дополнительные расходы с кг/шт
+            
+            $requirement1 = $row['requirement1']; // Требования по материалу 1
+            $requirement2 = $row['requirement2']; // Требования по материалу 2
+            $requirement3 = $row['requirement3']; // Требования по материалу 3
+            $cut_priladka = $row['cut_priladka']; // Приладка на резке
+            
+            $customer = $row['customer']; // Заказчик
+            $last_name = $row['last_name']; // Фамилия менеджера
+            $first_name = $row['first_name']; // Имя менеджера
+            $status_id = $row['status_id']; // Статус
+            $status_comment = $row['status_comment']; // Комментарий к статусу
+            $status_date = $row['status_date']; // Дата установления статуса
+            $num_for_customer = $row['num_for_customer']; // Номер заказа у данного заказчика
+            
+            // Если тип работы - плёнка без печати, то 
+            // машина = пустая, красочность = 0, рапорт = 0
+            if($work_type_id == WORK_TYPE_NOPRINT) {
+                $machine_id = null;
+                $ink_number = 0;
+                $raport = 0;
+            }
+            
+            // Если нет ламинации, то ламинатор = пустой, ширина ламинирующего вала = 0, лыжи для плёнки 2 = 0
+            if(empty($film_2) && empty($film_3)) {
+                $laminator_id = null;
+                $lamination_roller_width = 0;
+                $ski_2 = 0;
+            }
+            
+            // Если нет ламинации 2, то лыжи для плёнки 3 = 0
+            if(empty($film_3)) {
+                $ski_3 = 0;
+            }
+        }
+        
+        // Курсы валют
+        $usd = null;
+        $euro = null;
+        
+        if(!empty($date)) {
+            $sql = "select usd, euro from currency where date <= '$date' order by id desc limit 1";
+            $fetcher = new Fetcher($sql);
+            if($row = $fetcher->Fetch()) {
+                $usd = $row['usd'];
+                $euro = $row['euro'];
+            }
+        }
+        
+        // Данные с резки
+        $weight_cut = 0;
+        
+        $sql = "select sum(weight) from calculation_take_stream where calculation_take_id in (select id from calculation_take where calculation_id = $id)";
+        $fetcher = new Fetcher($sql);
+        if($row = $fetcher->Fetch()) {
+            $weight_cut = $row[0];
+        }
+        
+        $sql = "select sum(weight) from calculation_not_take_stream where calculation_stream_id in (select id from calculation_stream where calculation_id = $id)";
+        $fetcher = new Fetcher($sql);
+        if($row = $fetcher->Fetch()) {
+            $weight_cut += $row[0];
+        }
+        
+        $length_cut = 0;
+        
+        $sql = "select sum(length) from calculation_take_stream where calculation_take_id in (select id from calculation_take where calculation_id = $id)";
+        $fetcher = new Fetcher($sql);
+        if($row = $fetcher->Fetch()) {
+            $length_cut = $row[0];
+        }
+        
+        $sql = "select sum(length) from calculation_not_take_stream where calculation_stream_id in (select id from calculation_stream where calculation_id = $id)";
+        $fetcher = new Fetcher($sql);
+        if($row = $fetcher->Fetch()) {
+            $length_cut += $row[0];
+        }
+        
+        // Размеры тиражей
+        $quantities = array();
+        
+        if($work_type_id == WORK_TYPE_SELF_ADHESIVE && empty($error_message)) {
+            $sql = "select id, quantity from calculation_quantity where calculation_id = $id";
+            $fetcher = new Fetcher($sql);
+            
+            while($row = $fetcher->Fetch()) {
+                $quantities[$row['id']] = $row['quantity'];
+            }
+        }
+        
+        // Ширины ручьёв
+        $stream_widths = array();
+        
+        if(empty($stream_width)) {
+            $sql = "select stream_number, width from calculation_stream_width where calculation_id = $id";
+            $fetcher = new Fetcher($sql);
+            
+            while ($row = $fetcher->Fetch()) {
+                $stream_widths[$row['stream_number']] = $row['width'];
+            }
+        }
+        
+        // ПОЛУЧЕНИЕ НОРМ
+        $data_priladka = new DataPriladka(null, null, null, null, null, null, null);
+        $data_priladka_laminator = new DataPriladka(null, null, null, null, null, null, null);
+        $data_machine = new DataMachine(null, null, null, null, null, null);
+        $data_laminator = new DataLaminator(null, null, null);
+        $data_gap = new DataGap(null, null, null);
+        $data_ink = new DataInk(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+        $data_glue = new DataGlue(null, null, null, null, null, null, null);
+        $data_cliche = new DataCliche(null, null, null, null, null, null);
+        $data_extracharge = array();
+        
+        if(!empty($date)) {
+            if(empty($machine_id)) {
+                $data_priladka = new DataPriladka(0, 0, 0, 0, 0, 0, 0);
+            }
+            else {
+                $sql = "select time, length, stamp, waste_percent, time_run2, length_run2, waste_percent_run2 from norm_priladka where date <= '$date' and machine_id = $machine_id order by id desc limit 1";
+                $fetcher = new Fetcher($sql);
+                if ($row = $fetcher->Fetch()) {
+                    $data_priladka = new DataPriladka($row['time'], $row['length'], $row['stamp'], $row['waste_percent'], $row['time_run2'], $row['length_run2'], $row['waste_percent_run2']);
+                }
+            }
+            
+            if(empty($laminator_id)) {
+                $data_priladka_laminator = new DataPriladka(0, 0, 0, 0, 0, 0, 0);
+            }
+            else {
+                $sql = "select time, length, waste_percent from norm_laminator_priladka where date <= '$date' and laminator_id = $laminator_id order by id desc limit 1";
+                $fetcher = new Fetcher($sql);
+                if($row = $fetcher->Fetch()) {
+                    $data_priladka_laminator = new DataPriladka($row['time'], $row['length'], 0, $row['waste_percent'], 0, 0, 0);
+                }
+            }
+            
+            if(empty($machine_id)) {
+                $data_machine = new DataMachine(0, 0, 0, 0, 0, 0);
+            }
+            else {
+                $sql = "select price, speed, width, price_run2, speed_run2, vaporization_expense from norm_machine where date <= '$date' and machine_id = $machine_id order by id desc limit 1";
+                $fetcher = new Fetcher($sql);
+                if ($row = $fetcher->Fetch()) {
+                    $data_machine = new DataMachine($row['price'], $row['speed'], $row['width'], $row['vaporization_expense'], $row['price_run2'], $row['speed_run2']);
+                }
+            }
+            
+            if(empty($laminator_id)) {
+                $data_laminator = new DataLaminator(0, 0, 0);
+            }
+            else {
+                $sql = "select price, speed, max_width from norm_laminator where date <= '$date' and laminator_id = $laminator_id order by id desc limit 1";
+                $fetcher = new Fetcher($sql);
+                if($row = $fetcher->Fetch()) {
+                    $data_laminator = new DataLaminator($row['price'], $row['speed'], $row['max_width']);
+                }
+            }
+            
+            $sql = "select gap_raport, gap_stream, ski from norm_gap where date <= '$date' order by id desc limit 1";
+            $fetcher = new Fetcher($sql);
+            if($row = $fetcher->Fetch()) {
+                $data_gap = new DataGap($row['gap_raport'], $row['gap_stream'], $row['ski']);
+            }
+            
+            $sql = "select c_price, c_currency, c_expense, m_price, m_currency, m_expense, y_price, y_currency, y_expense, k_price, k_currency, k_expense, white_price, white_currency, white_expense, panton_price, panton_currency, panton_expense, lacquer_glossy_price, lacquer_glossy_currency, lacquer_glossy_expense, lacquer_matte_price, lacquer_matte_currency, lacquer_matte_expense, lacquer_selective_price, lacquer_selective_currency, lacquer_selective_expense, solvent_etoxipropanol_price, solvent_etoxipropanol_currency, solvent_flexol82_price, solvent_flexol82_currency, solvent_part, min_price_per_ink, self_adhesive_laquer_price, self_adhesive_laquer_currency, self_adhesive_laquer_expense, min_percent "
+                    . "from norm_ink where date <= '$date' order by id desc limit 1";
+            $fetcher = new Fetcher($sql);
+            if($row = $fetcher->Fetch()) {
+                $data_ink = new DataInk($row['c_price'], $row['c_currency'], $row['c_expense'], $row['m_price'], $row['m_currency'], $row['m_expense'], $row['y_price'], $row['y_currency'], $row['y_expense'], $row['k_price'], $row['k_currency'], $row['k_expense'], $row['white_price'], $row['white_currency'], $row['white_expense'], $row['panton_price'], $row['panton_currency'], $row['panton_expense'], $row['lacquer_glossy_price'], $row['lacquer_glossy_currency'], $row['lacquer_glossy_expense'], $row['lacquer_matte_price'], $row['lacquer_matte_currency'], $row['lacquer_matte_expense'], $row['lacquer_selective_price'], $row['lacquer_selective_currency'], $row['lacquer_selective_expense'], $row['solvent_etoxipropanol_price'], $row['solvent_etoxipropanol_currency'], $row['solvent_flexol82_price'], $row['solvent_flexol82_currency'], $row['solvent_part'], $row['min_price_per_ink'], $row['self_adhesive_laquer_price'], $row['self_adhesive_laquer_currency'], $row['self_adhesive_laquer_expense'], $row['min_percent']);
+            }
+            
+            if(empty($laminator_id)) {
+                $data_glue = new DataGlue(0, 0, 0, 0, 0, 0, 0);
+            }
+            else {
+                $sql = "select glue_price, glue_currency, glue_expense, glue_expense_pet, solvent_price, solvent_currency, solvent_part "
+                        . "from norm_glue where date <= '$date' and laminator_id = $laminator_id order by id desc limit 1";
+                $fetcher = new Fetcher($sql);
+                if($row = $fetcher->Fetch()) {
+                    $data_glue = new DataGlue($row['glue_price'], $row['glue_currency'], $row['glue_expense'], $row['glue_expense_pet'], $row['solvent_price'], $row['solvent_currency'], $row['solvent_part']);
+                }
+            }
+            
+            $sql = "select flint_price, flint_currency, kodak_price, kodak_currency, scotch_price, scotch_currency "
+                    . "from norm_cliche where date <= '$date' order by id desc limit 1";
+            $fetcher = new Fetcher($sql);
+            if($row = $fetcher->Fetch()) {
+                $data_cliche = new DataCliche($row['flint_price'], $row['flint_currency'], $row['kodak_price'], $row['kodak_currency'], $row['scotch_price'], $row['scotch_currency']);
+            }
+            
+            $sql = "select extracharge_type_id, from_weight, to_weight, value from extracharge";
+            $fetcher = new Fetcher($sql);
+            while($row = $fetcher->Fetch()) {
+                array_push($data_extracharge, new DataExtracharge($row['value'], $row['extracharge_type_id'], $row['from_weight'], $row['to_weight']));
+            }
+        }
+        
+        // Сохраняем данные в дублирующиеся поля (для ускорения загрузки списков)
+        $sql = "update calculation set "
+                . "duplicate_quantities = ". count($quantities).", "
+                . "duplicate_quantity_sum = ". array_sum($quantities).", "
+                . "duplicate_gap_raport = ".$data_gap->gap_raport.", "
+                . "duplicate_length_cut = $length_cut, "
+                . "duplicate_weight_cut = $weight_cut, "
+                . "duplicate_status_id = $status_id, "
+                . "duplicate_status_comment = '$status_comment', "
+                . "duplicate_status_date = '$status_date', "
+                . "duplicate_num_for_customer = $num_for_customer "
+                . "where id = $id";
+        $executer = new Executer($sql);
+    
+        // Создаём классы расчётов
+        if($work_type_id == WORK_TYPE_SELF_ADHESIVE && empty($error_message)) {
+            return new CalculationSelfAdhesive($data_priladka, 
+                    $data_priladka_laminator,
+                    $data_machine,
+                    $data_gap,
+                    $data_laminator,
+                    $data_ink,
+                    $data_glue,
+                    $data_cliche,
+                    $data_extracharge,
+                    $usd, // Курс доллара
+                    $euro, // Курс евро
+                    $weight_cut, // Сколько нарезано в кг
+                    $length_cut, // Сколько нарезано в м
+                    
+                    $date, // Дата
+                    $customer_id, // ID заказчика
+                    $name, // Наименование
+                    $unit, // Кг или шт
+                    $quantity, // Размер тиража в кг или шт
+                    $quantities, // Размер тиража в шт
+                    $work_type_id, // Тип работы: с печатью или без печати
+                    
+                    $film_1, // Основная пленка, марка
+                    $thickness_1, // Основная пленка, толщина, мкм
+                    $density_1, // Основная пленка, плотность, г/м2
+                    $price_1, // Основная пленка, цена
+                    $currency_1, // Основная пленка, валюта
+                    $eco_price_1, // Основная пленка, экосбор
+                    $eco_currency_1, // Основная пленка, валюта экосбора
+                    $customers_material_1, // Основная плёнка, другая, материал заказчика
+                    $ski_1, // Основная пленка, лыжи
+                    $width_ski_1, // Основная пленка, ширина пленки, мм
+                    
+                    $film_2, // Ламинация 1, марка
+                    $thickness_2, // Ламинация 1, толщина, мкм
+                    $density_2, // Ламинация 1, плотность, г/м2
+                    $price_2, // Ламинация 1, цена
+                    $currency_2, // Ламинация 1, валюта
+                    $eco_price_2, // Ламинация 1, экосбор
+                    $eco_currency_2, // Ламинация 1, валюта экосбора
+                    $customers_material_2, // Ламинация 1, другая, материал заказчика
+                    $ski_2, // Ламинация 1, лыжи
+                    $width_ski_2, // Ламинация 1, ширина пленки, мм
+                    
+                    $film_3, // Ламинация 2, марка
+                    $thickness_3, // Ламинация 2, толщина, мкм
+                    $density_3, // Ламинация 2, плотность, г/м2
+                    $price_3, // Ламинация 2, цена
+                    $currency_3, // Ламинация 2, валюта
+                    $eco_price_3, // Ламинация 2, экосбор
+                    $eco_currency_3, // Ламинация 2, валюта экосбора
+                    $customers_material_3, // Ламинация 2, другая, уд. вес
+                    $ski_3, // Ламинация 2, лыжи
+                    $width_ski_3,  // Ламинация 2, ширина пленки, мм
+                    
+                    $machine_id, // ID машины
+                    $laminator_id, // ID ламинатора
+                    $length, // Длина этикетки, мм
+                    $stream_width, // Ширина ручья, мм
+                    $stream_widths, // Ширины ручьёв, мм, если они неодинаковые
+                    $streams_number, // Количество ручьёв
+                    $raport, // Рапорт
+                    $number_in_raport, // Кол-во этикеток в рапорте
+                    $lamination_roller_width, // Ширина ламинирующего вала
+                    $ink_number, // Красочность
+                    $ink_run2_number, // Красочность, второй прогон
+                    $manager_id, // ID менеджера
+                    
+                    $ink_1, $ink_2, $ink_3, $ink_4, $ink_5, $ink_6, $ink_7, $ink_8, // Тип краски (CMYK, пантон, белая, лак)
+                    $color_1, $color_2, $color_3, $color_4, $color_5, $color_6, $color_7, $color_8, // Номер пантона
+                    $cmyk_1, $cmyk_2, $cmyk_3, $cmyk_4, $cmyk_5, $cmyk_6, $cmyk_7, $cmyk_8, // Тип CMYK (cyan, magenda, yellow, kontur)
+                    $lacquer_1, $lacquer_2, $lacquer_3, $lacquer_4, $lacquer_5, $lacquer_6, $lacquer_7, $lacquer_8, // Тип лака (глянцевый, матовый)
+                    $percent_1, $percent_2, $percent_3, $percent_4, $percent_5, $percent_6, $percent_7, $percent_8, // Процент данной краски
+                    $cliche_1, $cliche_2, $cliche_3, $cliche_4, $cliche_5, $cliche_6, $cliche_7, $cliche_8, // Форма (старая, Флинт, Кодак)
+                    
+                    $ink_run2_1, $ink_run2_2, $ink_run2_3, $ink_run2_4, // Тип краски, второй прогон
+                    $color_run2_1, $color_run2_2, $color_run2_3, $color_run2_4, // Номер пантона, второй прогон
+                    $cmyk_run2_1, $cmyk_run2_2, $cmyk_run2_3, $cmyk_run2_4, // Тип CMYK, второй прогон
+                    $lacquer_run2_1, $lacquer_run2_2, $lacquer_run2_3, $lacquer_run2_4, // Тип лака, второй прогон
+                    $percent_run2_1, $percent_run2_2, $percent_run2_3, $percent_run2_4, // Процент данной краски, второй прогон
+                    $cliche_run2_1, $cliche_run2_2, $cliche_run2_3, $cliche_run2_4, // Форма, второй прогон
+                    
+                    $cliche_in_price, // Включить ПФ в себестоимость
+                    $cliches_count_flint, // Количество форм Флинт
+                    $cliches_count_kodak, // Количество форм Кодак
+                    $cliches_count_old, // Количество старых форм
+                    $extracharge, // Наценка на тираж
+                    $extracharge_cliche, // Наценка на ПФ
+                    $customer_pays_for_cliche, // Заказчик платит за ПФ
+                    $knife, // Стоимость ножа
+                    $extracharge_knife, // Наценка на нож
+                    $knife_in_price, // Нож включается в стоимость
+                    $customer_pays_for_knife, // Заказчик платит за нож
+                    $extra_expense, // Дополнительные расходы с кг/шт
+                    
+                    $requirement1, // Требования по материалу 1
+                    $requirement2, // Требования по материалу 2
+                    $requirement3, // Требования по материалу 3
+                    $cut_priladka, // Приладка на резке
+                    
+                    $customer, // Заказчик
+                    $last_name, // Фамилия менеджера
+                    $first_name, // Имя менеджера
+                    $status_id, // Статус
+                    $status_comment, // Комментарий к статусу
+                    $status_date, // Дата установления статуса
+                    $num_for_customer); // Номер заказа у данного заказчика
+        }
+        elseif(empty ($error_message)) {
+            return new Calculation($data_priladka, 
+                    $data_priladka_laminator,
+                    $data_machine,
+                    $data_gap,
+                    $data_laminator,
+                    $data_ink,
+                    $data_glue,
+                    $data_cliche,
+                    $data_extracharge,
+                    $usd, // Курс доллара
+                    $euro, // Курс евро
+                    $weight_cut, // Сколько нарезано в кг
+                    $length_cut, // Сколько нарезано в м
+                    
+                    $date, // Дата
+                    $customer_id, // ID заказчика
+                    $name, // Наименование
+                    $unit, // Кг или шт
+                    $quantity, // Размер тиража в кг или шт
+                    $quantities, // Размер тиража в шт
+                    $work_type_id, // Тип работы: с печатью или без печати
+                    
+                    $film_1, // Основная пленка, марка
+                    $thickness_1, // Основная пленка, толщина, мкм
+                    $density_1, // Основная пленка, плотность, г/м2
+                    $price_1, // Основная пленка, цена
+                    $currency_1, // Основная пленка, валюта
+                    $eco_price_1, // Основная пленка, экосбор
+                    $eco_currency_1, // Основная пленка, валюта экосбора
+                    $customers_material_1, // Основная плёнка, другая, материал заказчика
+                    $ski_1, // Основная пленка, лыжи
+                    $width_ski_1, // Основная пленка, ширина пленки, мм
+                    
+                    $film_2, // Ламинация 1, марка
+                    $thickness_2, // Ламинация 1, толщина, мкм
+                    $density_2, // Ламинация 1, плотность, г/м2
+                    $price_2, // Ламинация 1, цена
+                    $currency_2, // Ламинация 1, валюта
+                    $eco_price_2, // Ламинация 1, экосбор
+                    $eco_currency_2, // Ламинация 1, валюта экосбора
+                    $customers_material_2, // Ламинация 1, другая, материал заказчика
+                    $ski_2, // Ламинация 1, лыжи
+                    $width_ski_2, // Ламинация 1, ширина пленки, мм
+                    
+                    $film_3, // Ламинация 2, марка
+                    $thickness_3, // Ламинация 2, толщина, мкм
+                    $density_3, // Ламинация 2, плотность, г/м2
+                    $price_3, // Ламинация 2, цена
+                    $currency_3, // Ламинация 2, валюта
+                    $eco_price_3, // Ламинация 3, экосбор
+                    $eco_currency_3, // Ламинация 3, валюта экосбора
+                    $customers_material_3, // Ламинация 2, другая, уд. вес
+                    $ski_3, // Ламинация 2, лыжи
+                    $width_ski_3,  // Ламинация 2, ширина пленки, мм
+                    
+                    $machine_id, // ID машина
+                    $laminator_id, // ID ламинатора
+                    $length, // Длина этикетки, мм
+                    $stream_width, // Ширина ручья, мм
+                    $stream_widths, // Ширины ручьёв, мм, если они неодинаковые
+                    $streams_number, // Количество ручьёв
+                    $raport, // Рапорт
+                    $number_in_raport, // Кол-во этикеток в рапорте
+                    $lamination_roller_width, // Ширина ламинирующего вала
+                    $ink_number, // Красочность
+                    $ink_run2_number, // Красочность, второй прогон
+                    $manager_id, // ID менеджера
+                    
+                    $ink_1, $ink_2, $ink_3, $ink_4, $ink_5, $ink_6, $ink_7, $ink_8, // Тип краски (CMYK, пантон, белая, лак)
+                    $color_1, $color_2, $color_3, $color_4, $color_5, $color_6, $color_7, $color_8, // Номер пантона
+                    $cmyk_1, $cmyk_2, $cmyk_3, $cmyk_4, $cmyk_5, $cmyk_6, $cmyk_7, $cmyk_8, // Тип CMYK (cyan, magenda, yellow, kontur)
+                    $lacquer_1, $lacquer_2, $lacquer_3, $lacquer_4, $lacquer_5, $lacquer_6, $lacquer_7, $lacquer_8, // Тип лака (глянцевый, матовый)
+                    $percent_1, $percent_2, $percent_3, $percent_4, $percent_5, $percent_6, $percent_7, $percent_8, // Процент данной краски
+                    $cliche_1, $cliche_2, $cliche_3, $cliche_4, $cliche_5, $cliche_6, $cliche_7, $cliche_8, // Форма (старая, Флинт, Кодак)
+                    
+                    $ink_run2_1, $ink_run2_2, $ink_run2_3, $ink_run2_4, // Тип краски, второй прогон
+                    $color_run2_1, $color_run2_2, $color_run2_3, $color_run2_4, // Номер пантона, второй прогон
+                    $cmyk_run2_1, $cmyk_run2_2, $cmyk_run2_3, $cmyk_run2_4, // Тип CMYK, второй прогон
+                    $lacquer_run2_1, $lacquer_run2_2, $lacquer_run2_3, $lacquer_run2_4, // Тип лака, второй прогон
+                    $percent_run2_1, $percent_run2_2, $percent_run2_3, $percent_run2_4, // Процент данной краски, второй прогон
+                    $cliche_run2_1, $cliche_run2_2, $cliche_run2_3, $cliche_run2_4, // Форма, второй прогон
+                    
+                    $cliche_in_price, // Включить ПФ в себестоимость
+                    $cliches_count_flint, // Количество форм Флинт
+                    $cliches_count_kodak, // Количество форм Кодак
+                    $cliches_count_old, // Количество старых форм
+                    $extracharge, // Наценка на тираж
+                    $extracharge_cliche, // Наценка на ПФ
+                    $customer_pays_for_cliche, // Заказчик платит за ПФ
+                    $knife, // Стоимость ножа
+                    $extracharge_knife, // Наценка на нож
+                    $knife_in_price, // Нож включается в стоимость
+                    $customer_pays_for_knife, // Заказчик платит за нож
+                    $extra_expense, // Дополнительные расходы с кг/шт
+                    
+                    $requirement1, // Требования по материалу 1
+                    $requirement2, // Требования по материалу 2
+                    $requirement3, // Требования по материалу 3
+                    $cut_priladka, // Приладка на резке
+                    
+                    $customer, // Заказчик
+                    $last_name, // Фамилия менеджера
+                    $first_name, // Имя менеджера
+                    $status_id, // Статус
+                    $status_comment, // Комментарий к статусу
+                    $status_date, // Дата установления статуса
+                    $num_for_customer); // Номер заказа для данного заказчика
+        }
+        else {
+            return $error_message;
+        }
+    }
+}
+
+// Расчёт
+class Calculation extends CalculationBase {
+    public $laminations_number = 0; // количество ламинаций
+    
+    public $uk1, $uk2, $uk3, $uk4, $ukpf, $ukcuspaypf; // уравнивающий коэффициент 1, 2, 3, ПФ, ЗаказчикПлатитЗаПФ
+    public $area_pure_start = 0; // м2 чистые, м2 (рассчитывается: длина * ширина * кол-во в шт.; используется для вычисления массы тиража, если он в шт.)
+    public $weight = 0; // масса тиража, кг
+    public $width_start_1, $width_start_2, $width_start_3; // ширина материала начальная (до приведения к числу кратному 5), мм
+    public $width_1, $width_2, $width_3; // ширина материала кратная 5, мм 
+    public $area_pure_1, $area_pure_2, $area_pure_3; // м2 чистые, м2 (рассчитывается: вес / плотность)
+    public $length_pure_start_1, $length_pure_start_2, $length_pure_start_3; // м пог чистые, м
+    public $waste_length_1, $waste_length_1_run2, $waste_length_2, $waste_length_3; // СтартСтопОтход, м
+    public $length_dirty_start_1, $length_dirty_start_1_run2, $length_dirty_start_2, $length_dirty_start_3; // м пог грязные, м
+    public $area_dirty_1, $area_dirty_2, $area_dirty_3; // м2 грязные, м2
+    public $weight_pure_1, $weight_pure_2, $weight_pure_3; // масса плёнки чистая, кг
+    public $length_pure_1, $length_pure_2, $length_pure_3; // длина плёнки чистая, м
+    public $weight_dirty_1, $weight_dirty_2, $weight_dirty_3; // масса плёнки грязная, кг
+    public $length_dirty_1, $length_dirty_2, $length_dirty_3; // длина плёнки грязная, кг
+    public $film_cost_1, $film_cost_2, $film_cost_3; // стоимость плёнки грязная, руб
+    public $priladka_time_1, $priladka_time_1_run2, $priladka_time_2, $priladka_time_3; // время приладки, мин
+    public $print_time_1, $print_time_1_run2, $lamination_time_2, $lamination_time_3; // время печати или ламинации без приладки, ч
+    public $work_time_1, $work_time_1_run2, $work_time_2, $work_time_3; // время печати или ламинации с приладкой, ч
+    public $work_cost_1, $work_cost_1_run2, $work_cost_2, $work_cost_3; // стоимость печати или ламирации с приладкой, руб
+    public $print_area; // площадь запечатки
+    public $ink_1kg_mix_weight; // расход КраскаСмеси на 1 кг краски, кг
+    public $ink_flexol82_kg_price; // цена 1 кг чистого флексоля 82 для краски, руб
+    public $ink_etoxypropanol_kg_price; // цена 1 кг чистого этоксипропанола для краски, руб
+    
+    public $vaporization_area_dirty; // м2 испарения грязная
+    
+    public $vaporization_areas_pure; // массив: м2 испарения чистая
+    public $vaporization_expenses; // массив: расход испарения растворителя, кг
+    public $vaporization_costs; // массив: стоимость испарения растворителя, руб
+    
+    public $ink_kg_prices; // массив: цена 1 кг каждой чистой краски
+    public $mix_ink_kg_prices; // массив: цена 1 кг каждой КраскаСмеси
+    public $ink_expenses; // массив: расход каждой КраскаСмеси
+    public $ink_costs; // массив: стоимость каждой КраскаСмеси
+    public $ink_costs_mix; // массив: расход краска + растворитель каждой краски
+    public $ink_costs_final; // массив: стоимость каждой КраскаСмеси финальная
+    
+    public $vaporization_areas_pure_run2; // массив: м2 испарения чистая, Второй прогон
+    public $vaporization_expenses_run2; // массив: расход испарения растворителя, Второй прогон, кг
+    public $vaporization_costs_run2; // массив: стоимость испарения растворителя, Второй прогон, руб
+    
+    public $ink_kg_prices_run2; // массив: цена 1 кг каждой чистой краски, Второй прогон
+    public $mix_ink_kg_prices_run2; // массив: цена 1 кг каждой КраскаСмеси, Второй прогон
+    public $ink_expenses_run2; // массив: расход каждой КраскаСмеси, Второй прогон
+    public $ink_costs_run2; // массив: стоимость каждой КраскаСмеси, Второй прогон
+    public $ink_costs_mix_run2; // массив: расход краска + растворитель каждой краски, Второй прогон
+    public $ink_costs_final_run2; // массив: стоимость каждой КраскаСмеси финальная, Второй прогон
+    
+    public $glue_kg_weight; // расход КлеяСмеси на 1 кг клея, кг
+    public $glue_kg_price; // цена 1 кг чистого клея, руб
+    public $glue_solvent_kg_price; // цена 1 кг чистого растворителя для клея, руб
+    public $mix_glue_kg_price; // цена 1 кг КлеяСмеси, руб
+    public $glue_area2; // площадь заклейки, плёнка 2, м2
+    public $glue_area3; // площадь заклейки, плёнка 3, м2
+    public $glue_expense2; // расход КлеяСмеси, плёнка 2, кг
+    public $glue_expense3; // расход КлеяСмеси, плёнка 3, кг
+    public $glue_cost2; // стоимость КлеяСмеси, плёнка 2, руб
+    public $glue_cost3; // стоимость КлеяСмеси, плёнка 3, руб
+    
+    public $cliche_height; // высота формы, мм
+    public $cliche_width; // ширина формы, мм
+    public $cliche_area; // площадь формы, м2
+    public $cliche_new_number; // количество новых форм
+    public $cliche_costs; // массив: стоимость каждой формы, руб
+    public $cliche_costs_run2; // массив: стоимость каждой фоормы, Второй прогон, руб
+    public $scotch_costs; // массив: стоимость скотча
+    public $scotch_costs_run2; // массив: стоимость скотча, второй прогон
+    public $scotch_cost; // общая себестоимость скотча
+    
+    public $extracharge = 0; // Наценка на тираж
+    public $extracharge_cliche = 0; // Наценка на ПФ
+    public $film_cost; // Общая стоимость вссех материалов
+    public $work_cost; // Общая стоимость трудозатрат
+    public $ink_cost; // Стоимость красок
+    public $ink_expense; // Расход красок
+    public $glue_cost; // Стоимость клея
+    public $cliche_cost; // Себестоимость форм
+    public $cost; // Себестоимость
+    public $cost_per_unit; // Себестоимость за единицу 
+    public $shipping_cost; // Отгрузочная стоимость 
+    public $shipping_cost_per_unit; // Отгрузочная стоимость за единицу 
+    public $shipping_cliche_cost; // Отгрузочная стоимость форм 
+    public $income; // Прибыль
+    public $income_per_unit; // Прибыль за единицу
+    public $income_cliche; // Прибыль ПФ
+    public $total_weight_dirty; // Общая масса с приладкой 
+    public $film_cost_per_unit_1, $film_cost_per_unit_2, $film_cost_per_unit_3; // Масса с приладкой на 1 кг
+    public $film_waste_cost_1, $film_waste_cost_2, $film_waste_cost_3; // Отходы, стоимость
+    public $film_waste_weight_1, $film_waste_weight_2, $film_waste_weight_3; // Отходы, масса
+    public $total_extra_expense; // Общие дополнительные расходы
+    
+    public $number_in_meter; // Этикеток в 1 м. пог.
+
+    // Конструктор
+    public function __construct(DataPriladka $data_priladka, 
+            DataPriladka $data_priladka_laminator,
+            DataMachine $data_machine,
+            DataGap $data_gap,
+            DataLaminator $data_laminator,
+            DataInk $data_ink,
+            DataGlue $data_glue,
+            DataCliche $data_cliche,
+            array $data_extracharge,
+            $usd, // Курс доллара
+            $euro, // Курс евро
+            $weight_cut, // Сколько нарезано в кг
+            $length_cut, // Сколько нарезано в м
+            
+            $date, // Дата
+            $customer_id, // ID заказчика
+            $name, // Наименование
+            $unit, // Кг или шт
+            $quantity, // Размер тиража в кг или шт
+            array $quantities, // Размер тиража в шт
+            $work_type_id, // Тип работы: с печатью или без печати
+        
+            $film_1, // Основная пленка, марка
+            $thickness_1, // Основная пленка, толщина, мкм
+            $density_1, // Основная пленка, плотность, г/м2
+            $price_1, // Основная пленка, цена
+            $currency_1, // Основная пленка, валюта
+            $eco_price_1, // Основная пленка, экосбор
+            $eco_currency_1, // Основная пленка, валюта экосбора
+            $customers_material_1, // Основная плёнка, другая, материал заказчика
+            $ski_1, // Основная пленка, лыжи
+            $width_ski_1, // Основная пленка, ширина пленки, мм
+        
+            $film_2, // Ламинация 1, марка
+            $thickness_2, // Ламинация 1, толщина, мкм
+            $density_2, // Ламинация 1, плотность, г/м2
+            $price_2, // Ламинация 1, цена
+            $currency_2, // Ламинация 1, валюта
+            $eco_price_2, // Ламинация 1, экосбор
+            $eco_currency_2, // Ламинация 1, валюта экосбора
+            $customers_material_2, // Ламинация 1, другая, материал заказчика
+            $ski_2, // Ламинация 1, лыжи
+            $width_ski_2, // Ламинация 1, ширина пленки, мм
+        
+            $film_3, // Ламинация 2, марка
+            $thickness_3, // Ламинация 2, толщина, мкм
+            $density_3, // Ламинация 2, плотность, г/м2
+            $price_3, // Ламинация 2, цена
+            $currency_3, // Ламинация 2, валюта
+            $eco_price_3, // Ламминация 2, экосбор
+            $eco_currency_3, // Ламинация 2, валюта экосбора
+            $customers_material_3, // Ламинация 2, другая, уд. вес
+            $ski_3, // Ламинация 2, лыжи
+            $width_ski_3,  // Ламинация 2, ширина пленки, мм
+        
+            $machine_id, // ID машины
+            $laminator_id, // ID ламинатора
+            $length, // Длина этикетки, мм
+            $stream_width, // Ширина ручья, мм
+            array $stream_widths, // Ширины ручьёв, мм, если они неодинаковые
+            $streams_number, // Количество ручьёв
+            $raport, // Рапорт
+            $number_in_raport, // Кол-во этикеток в рапорте
+            $lamination_roller_width, // Ширина ламинирующего вала
+            $ink_number, // Красочность
+            $ink_run2_number, // Красочность, второй прогон
+            $manager_id, // ID менеджера
+            
+            $ink_1, $ink_2, $ink_3, $ink_4, $ink_5, $ink_6, $ink_7, $ink_8, // Тип краски (CMYK, пантон, белая, лак)
+            $color_1, $color_2, $color_3, $color_4, $color_5, $color_6, $color_7, $color_8, // Номер пантона
+            $cmyk_1, $cmyk_2, $cmyk_3, $cmyk_4, $cmyk_5, $cmyk_6, $cmyk_7, $cmyk_8, // Тип CMYK (cyan, magenda, yellow, kontur)
+            $lacquer_1, $lacquer_2, $lacquer_3, $lacquer_4, $lacquer_5, $lacquer_6, $lacquer_7, $lacquer_8, // Тип лака (глянцевый, матовый)
+            $percent_1, $percent_2, $percent_3, $percent_4, $percent_5, $percent_6, $percent_7, $percent_8, // Процент данной краски
+            $cliche_1, $cliche_2, $cliche_3, $cliche_4, $cliche_5, $cliche_6, $cliche_7, $cliche_8, // Форма (старая, Флинт, Кодак)
+            
+            $ink_run2_1, $ink_run2_2, $ink_run2_3, $ink_run2_4, // Тип краски, второй прогон
+            $color_run2_1, $color_run2_2, $color_run2_3, $color_run2_4, // Номер пантона, второй прогон
+            $cmyk_run2_1, $cmyk_run2_2, $cmyk_run2_3, $cmyk_run2_4, // Тип CMYK, второй прогон
+            $lacquer_run2_1, $lacquer_run2_2, $lacquer_run2_3, $lacquer_run2_4, // Тип лака, второй прогон
+            $percent_run2_1, $percent_run2_2, $percent_run2_3, $percent_run2_4, // Процент данной краски, второй прогон
+            $cliche_run2_1, $cliche_run2_2, $cliche_run2_3, $cliche_run2_4, // Форма, второй прогон
+            
+            $cliche_in_price, // Включить ПФ в себестоимость
+            $cliches_count_flint, // Количество форм Флинт
+            $cliches_count_kodak, // Количество форм Кодак
+            $cliches_count_old, // Количество старых форм
+            $extracharge, // Наценка на тираж
+            $extracharge_cliche, // Наценка на ПФ
+            $customer_pays_for_cliche, // Заказчик платит за ПФ
+            $knife, // Стоимость ножа
+            $extracharge_knife, // Наценка на нож
+            $knife_in_price, // Нож включается в стоимость
+            $customer_pays_for_knife, // Заказчик платит за нож
+            $extra_expense, // Дополнительные расходы с кг/шт
+            
+            $requirement1, // Требования по материалу 1
+            $requirement2, // Требования по материалу 2
+            $requirement3, // Требования по материалу 3
+            $cut_priladka, // Приладка на резке
+            
+            $customer, // Заказчик
+            $last_name, // Фамилия менеджера
+            $first_name, // Имя менеджера
+            $status_id, // Статус
+            $status_comment, // Комментарий к статусу
+            $status_date, // Дата установления статуса
+            $num_for_customer // Номер заказа для данного заказчика
+            ) {
+        parent::__construct($data_priladka, $data_priladka_laminator, $data_machine, $data_gap, $data_laminator, $data_ink, $data_glue, $data_cliche, $data_extracharge, 
+                $usd, $euro, $weight_cut, $length_cut,
+                $date, $customer_id, $name, $unit, $quantity, $quantities, $work_type_id, 
+                $film_1, $thickness_1, $density_1, $price_1, $currency_1, $eco_price_1, $eco_currency_1, $customers_material_1, $ski_1, $width_ski_1, 
+                $film_2, $thickness_2, $density_2, $price_2, $currency_2, $eco_price_2, $eco_currency_2, $customers_material_2, $ski_2, $width_ski_2, 
+                $film_3, $thickness_3, $density_3, $price_3, $currency_3, $eco_price_3, $eco_currency_3, $customers_material_3, $ski_3, $width_ski_3, 
+                $machine_id, $laminator_id, $length, $stream_width, $stream_widths, $streams_number, $raport, $number_in_raport, $lamination_roller_width, $ink_number, $ink_run2_number, $manager_id, 
+                $ink_1, $ink_2, $ink_3, $ink_4, $ink_5, $ink_6, $ink_7, $ink_8, 
+                $color_1, $color_2, $color_3, $color_4, $color_5, $color_6, $color_7, $color_8, 
+                $cmyk_1, $cmyk_2, $cmyk_3, $cmyk_4, $cmyk_5, $cmyk_6, $cmyk_7, $cmyk_8, 
+                $lacquer_1, $lacquer_2, $lacquer_3, $lacquer_4, $lacquer_5, $lacquer_6, $lacquer_7, $lacquer_8, 
+                $percent_1, $percent_2, $percent_3, $percent_4, $percent_5, $percent_6, $percent_7, $percent_8, 
+                $cliche_1, $cliche_2, $cliche_3, $cliche_4, $cliche_5, $cliche_6, $cliche_7, $cliche_8, 
+                $ink_run2_1, $ink_run2_2, $ink_run2_3, $ink_run2_4, 
+                $color_run2_1, $color_run2_2, $color_run2_3, $color_run2_4, 
+                $cmyk_run2_1, $cmyk_run2_2, $cmyk_run2_3, $cmyk_run2_4, 
+                $lacquer_run2_1, $lacquer_run2_2, $lacquer_run2_3, $lacquer_run2_4, 
+                $percent_run2_1, $percent_run2_2, $percent_run2_3, $percent_run2_4, 
+                $cliche_run2_1, $cliche_run2_2, $cliche_run2_3, $cliche_run2_4, 
+                $cliche_in_price, $cliches_count_flint, $cliches_count_kodak, $cliches_count_old, $extracharge, $extracharge_cliche, $customer_pays_for_cliche, 
+                $knife, $extracharge_knife, $knife_in_price, $customer_pays_for_knife, $extra_expense, 
+                $requirement1, $requirement2, $requirement3, $cut_priladka, 
+                $customer, $last_name, $first_name, $status_id, $status_comment, $status_date, $num_for_customer);
+                
+        // Если нет одной ламинации или обеих, то толщина, плотность и цена плёнок для ламинации имеют пустые значения.
+        // Присваиваем им значение 0, чтобы программа не сломалась при попытке вычилений с пустым значением.
+        if(empty($this->thickness_2)) $this->thickness_2 = 0;
+        if(empty($this->density_2)) $this->density_2 = 0;
+        if(empty($this->price_2)) $this->price_2 = 0;
+        if(empty($this->thickness_3)) $this->thickness_3 = 0;
+        if(empty($this->density_3)) $this->density_3 = 0;
+        if(empty($this->price_3)) $this->price_3 = 0;
+        
+        // Если нет рапорта, ширины вала ламинатора или красочности, присваиваем им 0
+        if(empty($this->raport)) $this->raport = 0;
+        if(empty($this->lamination_roller_width)) $this->lamination_roller_width = 0;
+        if(empty($this->ink_number)) $this->ink_number = 0;
+        
+        // Определение количества ламинаций
+        // Если плёнка 3, толщина 3 и плотность 3 - не пустые, то количество ламинаций - 2
+        // Иначе, если плёнка 2, толщина 2 и плотность 2 - не пустые, то количество ламинаций - 1
+        // Иначе количество ламинаций - 0
+        if(!empty($this->film_3) && !empty($this->thickness_3) && !empty($this->density_3)) {
+            $this->laminations_number = 2;
+        }
+        elseif(!empty ($this->film_2) && !empty ($this->thickness_2) && !empty ($this->density_2)) {
+            $this->laminations_number = 1;
+        }
+        else {
+            $this->laminations_number = 0;
+        }
+        
+        // Если тип работы - плёнка без печати, то 
+        // машина = пустая, красочность = 0, рапорт = 0
+        if($this->work_type_id == WORK_TYPE_NOPRINT) {
+            $this->machine_id = null;
+            $this->ink_number = 0;
+            $this->raport = 0;
+        }
+        
+        // Если нет ламинации, то ширина ламинирующего вала = 0, лыжи для плёнки 2 = 0
+        if($this->laminations_number == 0) {
+            $this->lamination_roller_width = 0;
+            $this->ski_2 = 0;
+        }
+        
+        // Если нет ламинации 2, то лыжи для плёнки 3 = 0
+        if($this->laminations_number < 2) {
+            $this->ski_3 = 0;
+        }
+        
+        // Если материал заказчика, то его цена = 0
+        if($this->customers_material_1 == true) $this->price_1 = 0;
+        if($this->customers_material_2 == true) $this->price_2 = 0;
+        if($this->customers_material_3 == true) $this->price_3 = 0;
+        
+        // Уравнивующий коэфф. 1(УК1)=0 когда нет печати,=1 когда есть печать
+        $this->uk1 = $this->work_type_id == WORK_TYPE_PRINT ? 1 : 0;
+        
+        // Уравнивующий коэфф. 2 (УК2)=0 когда нет ламинации 1 , =1 когда есть ламинация 1
+        $this->uk2 = $this->laminations_number > 0 ? 1 : 0;
+        
+        // Уравнивующий коэфф. 3 (УК3)=0 когда нет ламинации 2, =1 когда есть ламинация 2
+        $this->uk3 = $this->laminations_number > 1 ? 1 : 0;
+        
+        // Уравнивающий коэфф. 4 (УК4)=0 когда нет второго прогона, =1 когда есть второй прогон
+        $this->uk4 = empty($this->ink_run2_number) ? 0 : 1;
+        
+        // Уравнивающий коэфф. ПФ (УКПФ)=0, когда ПФ не велючен в себестоимость, =1 когда ПФ включен в себестоимость
+        $this->ukpf = $this->cliche_in_price == 1 ? 1 : 0;
+        
+        // Уравнивающий коэфф. ЗаказчикПлатитЗаПФ, когда платит заказчик = 1, когда платим мы = 0
+        $this->ukcuspaypf = $this->customer_pays_for_cliche == 1 ? 1 : 0;
+        
+        // НИЖЕ НАЧИНАЕТСЯ ВЫЧИСЛЕНИЕ
+        
+        // М2 чистые, м2
+        // Считаем только если размер тиража выражен в штуках: длина * ширина ручья * размер тиража 
+        // (если ширины ручья неодинаковые, то длина * сумма ширин / кол-во ручьёв * размер тиража)
+        // Если размер тиража выражен в килограммах, то нам м2 чистые пока не нужны, вычислим их позже
+        if($this->unit == KG) {
+            $this->area_pure_start = 0;
+        }
+        else if(empty ($this->stream_width)) {
+            $this->area_pure_start = $this->length * (array_sum($this->stream_widths) / $this->streams_number) * $this->quantity / 1000000;
+        }
+        else {
+            $this->area_pure_start = $this->length * $this->stream_width * $this->quantity / 1000000;
+        }
+        
+        // Масса тиража, кг
+        // Если размер тиража выражен в килограммах, то это и будет масса тиража
+        // Если размер тиража выражен в штуках, то считаем: м2 чистые * сумма плотностей всех плёнок
+        if($this->unit == KG) {
+            $this->weight = $this->quantity;
+        }
+        else {
+            $this->weight = $this->area_pure_start * ($this->density_1 + $this->density_2 + $this->density_3) / 1000;
+        }
+
+        // Ширина материала (начальная) 1, мм
+        // Если без лыж: количество ручьёв * ширина ручья (если ширина ручьёв неодинаковая, то сумма ширин ручьёв)
+        // Если стандартные лыжи: количество ручьёв * ширина ручья + 20 (если ширина ручьёв неодинаковая, то сумма ширин ручьёв + 20)
+        // Если нестандартные лыжи: ширина материала вводится вручную
+        switch($this->ski_1) {
+            case SKI_NO:
+                if(empty($this->stream_width)) {
+                    $this->width_start_1 = array_sum($this->stream_widths);
+                }
+                else {
+                    $this->width_start_1 = $this->streams_number * $this->stream_width;
+                }
+                break;
+                
+            case SKI_STANDARD:
+                if(empty($this->stream_width)) {
+                    $this->width_start_1 = array_sum($this->stream_widths) + 20;
+                }
+                else {
+                    $this->width_start_1 = $this->streams_number * $this->stream_width + 20;
+                }
+                break;
+        
+            case SKI_NONSTANDARD:
+                $this->width_start_1 = $this->width_ski_1;
+                break;
+            
+            default :
+                $this->width_start_1 = 0;
+                break;
+        }
+        
+        // Ширина материала (начальная) 2, мм
+        switch($this->ski_2) {
+            case SKI_NO:
+                if(empty($this->stream_width)) {
+                    $this->width_start_2 = array_sum($this->stream_widths);
+                }
+                else {
+                    $this->width_start_2 = $this->streams_number * $this->stream_width;
+                }
+                break;
+        
+            case SKI_STANDARD:
+                if(empty($this->stream_width)) {
+                    $this->width_start_2 = array_sum($this->stream_widths) + 20;
+                }
+                else {
+                    $this->width_start_2 = $this->streams_number * $this->stream_width + 20;
+                }
+                break;
+        
+            case SKI_NONSTANDARD:
+                $this->width_start_2 = $this->width_ski_2;
+                break;
+            
+            default :
+                $this->width_start_2 = 0;
+                break;
+        }
+        
+        // Ширина материала (начальная) 3, мм
+        switch($this->ski_3) {
+            case SKI_NO:
+                if(empty($this->stream_width)) {
+                    $this->width_start_3 = array_sum($this->stream_widths);
+                }
+                else {
+                    $this->width_start_3 = $this->streams_number * $this->stream_width;
+                }
+                break;
+        
+            case SKI_STANDARD:
+                if(empty($this->stream_width)) {
+                    $this->width_start_3 = array_sum($this->stream_widths) + 20;
+                }
+                else {
+                    $this->width_start_3 = $this->streams_number * $this->stream_width + 20;
+                }
+                break;
+        
+            case SKI_NONSTANDARD:
+                $this->width_start_3 = $this->width_ski_3;
+                break;
+            
+            default :
+                $this->width_start_3 = 0;
+                break;
+        }
+        
+        // Ширина материала (кратная 5) 1, мм
+        $this->width_1 = ceil($this->width_start_1 / 5) * 5;
+        
+        // Ширина материала (кратная 5) 2, мм
+        $this->width_2 = ceil($this->width_start_2 / 5) * 5;
+        
+        // Ширина материала (кратная 5) 3, мм
+        $this->width_3 = ceil($this->width_start_3 / 5) * 5;
+        
+        
+        // М2 чистые 1, м2
+        $this->area_pure_1 = $this->weight * 1000 / ($this->density_1 + $this->density_2 + $this->density_3);
+        
+        // М2 чистые 2, м2
+        $this->area_pure_2 = $this->weight * 1000 / ($this->density_1 + $this->density_2 + $this->density_3) * $this->uk2;
+        
+        // М2 чистые 3, м2
+        $this->area_pure_3 = $this->weight * 1000 / ($this->density_1 + $this->density_2 + $this->density_3) * $this->uk3;
+        
+        
+        // М пог чистые 1, м
+        if(empty($this->stream_width)) {
+            $this->length_pure_start_1 = $this->area_pure_1 / (array_sum($this->stream_widths) / 1000);
+        }
+        else {
+            $this->length_pure_start_1 = $this->area_pure_1 / ($this->streams_number * $this->stream_width / 1000);
+        }
+        
+        // М пог чистые 2, м
+        if(empty($this->stream_width)) {
+            $this->length_pure_start_2 = $this->area_pure_2 / (array_sum($this->stream_widths) / 1000);
+        }
+        else {
+            $this->length_pure_start_2 = $this->area_pure_2 / ($this->streams_number * $this->stream_width / 1000);
+        }
+        
+        // М пог чистые 3, м
+        if(empty($this->stream_width)) {
+            $this->length_pure_start_3 = $this->area_pure_3 / (array_sum($this->stream_widths) / 1000);
+        }
+        else {
+            $this->length_pure_start_3 = $this->area_pure_3 / ($this->streams_number * $this->stream_width / 1000);
+        }
+        
+        // СтартСтопОтход 1, м
+        $this->waste_length_1 = $this->data_priladka->waste_percent * $this->length_pure_start_1 / 100;
+        
+        // СтартСтопОтход 1 Второй Прогон, м
+        $this->waste_length_1_run2 = ($this->data_priladka->waste_percent_run2 ?? 0) * $this->length_pure_start_1 / 100 * $this->uk4;
+        
+        // СтартСтопОтход 2, м
+        $this->waste_length_2 = $this->data_priladka_laminator->waste_percent * $this->length_pure_start_2 / 100;
+        
+        // СтартСтопОтход 3, м
+        $this->waste_length_3 = $this->data_priladka_laminator->waste_percent * $this->length_pure_start_3 / 100;
+        
+        
+        // М пог грязные 1, м
+        $this->length_dirty_start_1 = $this->length_pure_start_1 + ($this->ink_number * $this->data_priladka->length) + ($this->laminations_number * $this->data_priladka_laminator->length) + $this->waste_length_1 + ($this->ink_run2_number * $this->data_priladka->length_run2) + $this->waste_length_1_run2;
+        
+        // М пог грязные 1 второй прогон, м
+        $this->length_dirty_start_1_run2 = $this->length_pure_start_1 + ($this->laminations_number * $this->data_priladka_laminator->length) + $this->waste_length_1 + ($this->ink_run2_number * $this->data_priladka->length_run2) + $this->waste_length_1_run2;
+        
+        // М пог грязные 2, м
+        $this->length_dirty_start_2 = $this->length_pure_start_2 + ($this->laminations_number * $this->data_priladka_laminator->length) + $this->waste_length_2; 
+        
+        // М пог грязные 3, м
+        $this->length_dirty_start_3 = $this->length_pure_start_3 + ($this->data_priladka_laminator->length * $this->uk3) + $this->waste_length_3;
+        
+        
+        // М2 грязные 1, м2
+        $this->area_dirty_1 = $this->length_dirty_start_1 * $this->width_1 / 1000;
+        
+        // М2 грязные 2, м2
+        $this->area_dirty_2 = $this->length_dirty_start_2 * $this->width_2 / 1000;
+        
+        // М2 грязные 3, м2
+        $this->area_dirty_3 = $this->length_dirty_start_3 * $this->width_3 / 1000;
+        
+        //****************************************
+        // Массы и длины плёнок
+        //****************************************
+        
+        // Масса плёнки чистая 1
+        $this->weight_pure_1 = $this->length_pure_start_1 * $this->width_1 * $this->density_1 / 1000000;
+        
+        // Масса плёнки чистая 2
+        $this->weight_pure_2 = $this->length_pure_start_2 * $this->width_2 * $this->density_2 / 1000000;
+        
+        // Масса плёнки чистая 3
+        $this->weight_pure_3 = $this->length_pure_start_3 * $this->width_3 * $this->density_3 / 1000000;
+        
+        
+        // Длина пленки чистая 1, м
+        $this->length_pure_1 = $this->length_pure_start_1;
+        
+        // Длина пленки чистая 2, м
+        $this->length_pure_2 = $this->length_pure_start_2;
+        
+        // Длина пленки чистая 3, м
+        $this->length_pure_3 = $this->length_pure_start_3;
+        
+        
+        // Масса плёнки грязная 1, кг
+        $this->weight_dirty_1 = $this->area_dirty_1 * $this->density_1 / 1000;
+        
+        // Масса плёнки грязная 2, кг
+        $this->weight_dirty_2 = $this->area_dirty_2 * $this->density_2 / 1000;
+        
+        // Масса плёнки грязная 3, кг
+        $this->weight_dirty_3 = $this->area_dirty_3 * $this->density_3 / 1000;
+        
+        
+        // Длина плёнки грязная 1, м
+        $this->length_dirty_1 = $this->length_dirty_start_1;
+         
+        // Длина плёнки грязная 2, м
+        $this->length_dirty_2 = $this->length_dirty_start_2;
+        
+        // Длина плёнки грязная 3, м
+        $this->length_dirty_3 = $this->length_dirty_start_3;
+    
+        //****************************************
+        // Общая стоимость плёнок
+        //****************************************
+        
+        // Общая стоимость грязная 1, руб
+        $this->film_cost_1 = ($this->weight_dirty_1 * $this->price_1 * self::GetCurrencyRate($this->currency_1, $this->usd, $this->euro)) + ($this->weight_dirty_1 * $this->eco_price_1 * self::GetCurrencyRate($this->eco_currency_1, $this->usd, $this->euro));
+        
+        // Общая стоимость грязная 2, руб
+        $this->film_cost_2 = ($this->weight_dirty_2 * $this->price_2 * self::GetCurrencyRate($this->currency_2, $this->usd, $this->euro)) + ($this->weight_dirty_2 * $this->eco_price_2 * self::GetCurrencyRate($this->eco_currency_2, $this->usd, $this->euro));
+        
+        // Общая стоимость грязная 3, руб
+        $this->film_cost_3 = ($this->weight_dirty_3 * $this->price_3 * self::GetCurrencyRate($this->currency_3, $this->usd, $this->euro)) + ($this->weight_dirty_3 * $this->eco_price_3 * self::GetCurrencyRate($this->eco_currency_3, $this->usd, $this->euro));
+    
+        //*****************************************
+        // Время - деньги
+        //*****************************************
+        
+        // Время приладки 1, мин
+        $this->priladka_time_1 = $this->ink_number * $this->data_priladka->time / 60;
+        
+        // Время приладки 1 Второй прогон, мин
+        $this->priladka_time_1_run2 = $this->ink_run2_number * $this->data_priladka->time_run2 / 60 * $this->uk4;
+        
+        // Время приладки 2, мин
+        $this->priladka_time_2 = $this->data_priladka_laminator->time * $this->uk2 / 60;
+        
+        // Время приладки 3, мин
+        $this->priladka_time_3 = $this->data_priladka_laminator->time * $this->uk3 / 60;
+        
+
+        // Время печати (без приладки) 1, ч
+        // Если печати нет, то сразу возвращаем 0, иначе получится деление на 0
+        $this->print_time_1 = $this->data_machine->speed == 0 ? 0 : ($this->length_pure_start_1 + $this->waste_length_1 + $this->waste_length_1_run2) / $this->data_machine->speed / 1000 * $this->uk1;
+        
+        // Время печати (без приладки) 1 второй прогон, ч
+        // Если печати нет, то сразу возвращаем 0, иначе получится деление на 0
+        $this->print_time_1_run2 = $this->data_machine->speed_run2 == 0 ? 0 : ($this->length_pure_start_1 + $this->waste_length_1 + $this->waste_length_1_run2) / $this->data_machine->speed_run2 / 1000 * $this->uk1 * $this->uk4;
+        
+        // Время ламинации (без приладки) 2, ч
+        // Если печати нет, то сразу возвращаем 0, иначе получится деление на 0
+        $this->lamination_time_2 = $this->data_laminator->speed == 0 ? 0 : ($this->length_pure_start_2 + $this->waste_length_2) / $this->data_laminator->speed / 1000 * $this->uk2;
+        
+        // Время ламинации (без приладки) 3, ч
+        // Если печати нет, то сразу возвращаем 0, иначе получится деление на 0
+        $this->lamination_time_3 = $this->data_laminator->speed == 0 ? 0 : ($this->length_pure_start_3 + $this->waste_length_3) / $this->data_laminator->speed / 1000 * $this->uk3;
+        
+        
+        // Общее время выполнения тиража 1, ч
+        $this->work_time_1 = $this->priladka_time_1 + $this->print_time_1;
+        
+        // Общее время выполнения тиража 1 второй прогон, ч
+        $this->work_time_1_run2 = $this->priladka_time_1_run2 + $this->print_time_1_run2;
+         
+        // Общее время выполнения тиража 2, ч
+        $this->work_time_2 = $this->priladka_time_2 + $this->lamination_time_2;
+        
+        // Общее время выполнения тиража 3, ч
+        $this->work_time_3 = $this->priladka_time_3 + $this->lamination_time_3;
+        
+        
+        // Стоимость выполнения тиража 1, руб
+        $this->work_cost_1 = $this->work_time_1 * $this->data_machine->price;
+        
+        // Стоимость выполнения тиража 1 второй прогон, руб
+        $this->work_cost_1_run2 = $this->work_time_1_run2 * $this->data_machine->price_run2;
+        
+        // Стоимость выполнения тиража 2, руб
+        $this->work_cost_2 = $this->work_time_2 * $this->data_laminator->price;
+        
+        // Стоимость выполнения тиража 3, руб
+        $this->work_cost_3 = $this->work_time_3 * $this->data_laminator->price;
+        
+        //****************************************
+        // Расход краски
+        //****************************************
+        
+        // Площадь запечатки, м2
+        if(empty($this->stream_width)) {
+            $this->print_area = $this->length_dirty_1 * (array_sum($this->stream_widths) + 10) / 1000;
+        }
+        else {
+            $this->print_area = $this->length_dirty_1 * ($this->stream_width * $this->streams_number + 10) / 1000;
+        }
+        
+        // Расход КраскаСмеси на 1 кг краски, кг
+        $this->ink_1kg_mix_weight = 1 + $this->data_ink->solvent_part;
+        
+        // Цена 1 кг чистого флексоля 82, руб
+        $this->ink_flexol82_kg_price = $this->data_ink->solvent_flexol82_price;
+        
+        // Цена 1 кг чистого этоксипропанола, руб
+        $this->ink_etoxypropanol_kg_price = $this->data_ink->solvent_etoxipropanol_price;
+        
+        // Если печатаем на Комифлекс, то пользуемся флексолем82, иначе - этоксипропанолом
+        $ink_solvent_kg_price = 0;
+        $ink_solvent_currency = 1;
+        
+        if($this->machine_id == PRINTER_COMIFLEX || $this->machine_id == PRINTER_SOMA_OPTIMA) {
+            $ink_solvent_kg_price = $this->ink_flexol82_kg_price;
+            $ink_solvent_currency = self::GetCurrencyRate($this->data_ink->solvent_flexol82_currency, $this->usd, $this->euro);
+        }
+        else {
+            $ink_solvent_kg_price = $this->ink_etoxypropanol_kg_price;
+            $ink_solvent_currency = self::GetCurrencyRate($this->data_ink->solvent_etoxipropanol_currency, $this->usd, $this->euro);
+        }
+        
+        // М2 испарения растворителя грязная, м2
+        $this->vaporization_area_dirty = $this->data_machine->width * $this->length_dirty_start_1 / 1000;
+        
+        // ПЕРВЫЙ ПРОГОН
+        
+        // Создаём массив: м2 испарения чистая
+        $this->vaporization_areas_pure = array();
+        
+        // Создаём массив: расход испарения растворителя, кг
+        $this->vaporization_expenses = array();
+        
+        // Создаём массив: стоимость испарения растворителя, руб
+        $this->vaporization_costs = array();
+        
+        // Создаём массивв цен за 1 кг каждой чистой краски
+        $this->ink_kg_prices = array();
+        
+        // Создаём массив цен за 1 кг каждой КраскаСмеси
+        $this->mix_ink_kg_prices = array();
+        
+        // Создаём массив расходов каждой КраскаСмеси
+        $this->ink_expenses = array();
+        
+        // Создаём массив стоимостей каждой КраскаСмеси
+        $this->ink_costs = array();
+        
+        // Создаём массив расходов краска + растворитель
+        $this->ink_costs_mix = array();
+        
+        // Создаём массив финальных стоимостей каждой КраскаСмеси
+        $this->ink_costs_final = array();
+        
+        // Перебираем все краски и помещаем в каждый из четырёх массивов данные по каждой краске
+        for($i = 1; $i <= $this->ink_number; $i++) {
+            $ink = "ink_$i";
+            $cmyk = "cmyk_$i";
+            $lacquer = "lacquer_$i";
+            $percent = "percent_$i";
+            
+            // Цена 1 кг чистой краски, руб
+            $price = $this->GetInkPrice($$ink, $$cmyk, $$lacquer, $this->data_ink->c_price, $this->data_ink->c_currency, $this->data_ink->m_price, $this->data_ink->m_currency, $this->data_ink->y_price, $this->data_ink->y_currency, $this->data_ink->k_price, $this->data_ink->k_currency, $this->data_ink->panton_price, $this->data_ink->panton_currency, $this->data_ink->white_price, $this->data_ink->white_currency, $this->data_ink->lacquer_glossy_price, $this->data_ink->lacquer_glossy_currency, $this->data_ink->lacquer_matte_price, $this->data_ink->lacquer_matte_currency, $this->data_ink->lacquer_selective_price, $this->data_ink->lacquer_selective_currency);
+            $ink_kg_price = $price->value * self::GetCurrencyRate($price->currency, $this->usd, $this->euro);
+            $this->ink_kg_prices[$i] = $ink_kg_price;
+            
+            // Цена 1 кг КраскаСмеси, руб
+            $mix_ink_kg_price = (($ink_kg_price * 1) + ($ink_solvent_kg_price * $this->data_ink->solvent_part)) / $this->ink_1kg_mix_weight;
+            $this->mix_ink_kg_prices[$i] = $mix_ink_kg_price;
+            
+            // Расход КраскаСмеси, кг
+            $ink_expense = $this->print_area * $this->GetInkExpense($$ink, $$cmyk, $$lacquer, $this->data_ink->c_expense, $this->data_ink->m_expense, $this->data_ink->y_expense, $this->data_ink->k_expense, $this->data_ink->panton_expense, $this->data_ink->white_expense, $this->data_ink->lacquer_glossy_expense, $this->data_ink->lacquer_matte_expense, $this->data_ink->lacquer_selective_expense) * $$percent / 1000 / 100;
+            $this->ink_expenses[$i] = $ink_expense;
+            
+            // Стоимость КраскаСмеси, руб
+            $ink_cost = $ink_expense * $mix_ink_kg_price;
+            $this->ink_costs[$i] = $ink_cost;
+            
+            // М2 испарения растворителя чистая, м2
+            $this->vaporization_areas_pure[$i] = $this->vaporization_area_dirty - ($this->print_area * $$percent / 100);
+        
+            // Расход испарения растворителя, кг
+            $this->vaporization_expenses[$i] = $this->vaporization_areas_pure[$i] * $this->data_machine->vaporization_expense / 1000;
+        
+            // Стоимость испарения растворителя, руб
+            $this->vaporization_costs[$i] = $this->vaporization_expenses[$i] * $ink_solvent_kg_price * $ink_solvent_currency;
+            
+            // Расход (краска + растворитель на одну краску), руб
+            $this->ink_costs_mix[$i] = $this->ink_costs[$i] + $this->vaporization_costs[$i];
+            
+            // Стоимость КраскаСмеси финальная, руб
+            if($this->ink_costs_mix[$i] < $this->data_ink->min_price_per_ink) {
+                $this->ink_costs_final[$i] = floatval($this->data_ink->min_price_per_ink);
+            }
+            else {
+                $this->ink_costs_final[$i] = floatval($this->ink_costs_mix[$i]);
+            }
+        }
+        
+        // ВТОРОЙ ПРОГОН
+        
+        // Создаём массив: м2 испарения чистая
+        $this->vaporization_areas_pure_run2 = array();
+        
+        // Создаём массив: расход испарения растворителя, кг
+        $this->vaporization_expenses_run2 = array();
+        
+        // Создаём массив: стоимость испарения растворителя, руб
+        $this->vaporization_costs_run2 = array();
+        
+        // Создаём массивв цен за 1 кг каждой чистой краски
+        $this->ink_kg_prices_run2 = array();
+        
+        // Создаём массив цен за 1 кг каждой КраскаСмеси
+        $this->mix_ink_kg_prices_run2 = array();
+        
+        // Создаём массив расходов каждой КраскаСмеси
+        $this->ink_expenses_run2 = array();
+        
+        // Создаём массив стоимостей каждой КраскаСмеси
+        $this->ink_costs_run2 = array();
+        
+        // Создаём массив расходов краска + растворитель
+        $this->ink_costs_mix_run2 = array();
+        
+        // Создаём массив финальных стоимостей каждой КраскаСмеси
+        $this->ink_costs_final_run2 = array();
+        
+        // Перебираем все краски и помещаем в каждый из четырёх массивов данные по каждой краске
+        for($i = 1; $i <= $this->ink_run2_number; $i++) {
+            $ink_run2 = "ink_run2_$i";
+            $cmyk_run2 = "cmyk_run2_$i";
+            $lacquer_run2 = "lacquer_run2_$i";
+            $percent_run2 = "percent_run2_$i";
+            
+            // Цена 1 кг чистой краски, руб
+            $price = $this->GetInkPrice($$ink_run2, $$cmyk_run2, $$lacquer_run2, $this->data_ink->c_price, $this->data_ink->c_currency, $this->data_ink->m_price, $this->data_ink->m_currency, $this->data_ink->y_price, $this->data_ink->y_currency, $this->data_ink->k_price, $this->data_ink->k_currency, $this->data_ink->panton_price, $this->data_ink->panton_currency, $this->data_ink->white_price, $this->data_ink->white_currency, $this->data_ink->lacquer_glossy_price, $this->data_ink->lacquer_glossy_currency, $this->data_ink->lacquer_matte_price, $this->data_ink->lacquer_matte_currency, $this->data_ink->lacquer_selective_price, $this->data_ink->lacquer_selective_currency);
+            $ink_kg_price = $price->value * self::GetCurrencyRate($price->currency, $this->usd, $this->euro);
+            $this->ink_kg_prices_run2[$i] = $ink_kg_price;
+            
+            // Цена 1 кг КраскаСмеси, руб
+            $mix_ink_kg_price = (($ink_kg_price * 1) + ($ink_solvent_kg_price * $this->data_ink->solvent_part)) / $this->ink_1kg_mix_weight;
+            $this->mix_ink_kg_prices_run2[$i] = $mix_ink_kg_price;
+            
+            // Расход КраскаСмеси, кг
+            $ink_expense = $this->print_area * $this->GetInkExpense($$ink_run2, $$cmyk_run2, $$lacquer_run2, $this->data_ink->c_expense, $this->data_ink->m_expense, $this->data_ink->y_expense, $this->data_ink->k_expense, $this->data_ink->panton_expense, $this->data_ink->white_expense, $this->data_ink->lacquer_glossy_expense, $this->data_ink->lacquer_matte_expense, $this->data_ink->lacquer_selective_expense) * $$percent_run2 / 1000 / 100;
+            $this->ink_expenses_run2[$i] = $ink_expense;
+            
+            // Стоимость КраскаСмеси, руб
+            $ink_cost = $ink_expense * $mix_ink_kg_price;
+            $this->ink_costs_run2[$i] = $ink_cost;
+            
+            // М2 испарения растворителя чистая, м2
+            $this->vaporization_areas_pure_run2[$i] = $this->vaporization_area_dirty - ($this->print_area * $$percent_run2 / 100);
+        
+            // Расход испарения растворителя, кг
+            $this->vaporization_expenses_run2[$i] = $this->vaporization_areas_pure_run2[$i] * $this->data_machine->vaporization_expense / 1000;
+        
+            // Стоимость испарения растворителя, руб
+            $this->vaporization_costs_run2[$i] = $this->vaporization_expenses_run2[$i] * $ink_solvent_kg_price * $ink_solvent_currency;
+            
+            // Расход (краска + растворитель на одну краску), руб
+            $this->ink_costs_mix_run2[$i] = $this->ink_costs_run2[$i] + $this->vaporization_costs_run2[$i];
+            
+            // Стоимость КраскаСмеси финальная, руб
+            if($this->ink_costs_mix_run2[$i] < $this->data_ink->min_price_per_ink) {
+                $this->ink_costs_final_run2[$i] = floatval($this->data_ink->min_price_per_ink);
+            }
+            else {
+                $this->ink_costs_final_run2[$i] = floatval($this->ink_costs_mix_run2[$i]);
+            }
+        }
+        
+        //********************************************
+        // Расход клея
+        //********************************************
+        
+        // Расход КлеяСмеси на 1 кг клея, кг
+        $this->glue_kg_weight = 1 + $this->data_glue->solvent_part;
+        
+        // Цена 1 кг чистого клея, руб
+        $this->glue_kg_price = $this->data_glue->glue_price * self::GetCurrencyRate($this->data_glue->glue_currency, $this->usd, $this->euro);
+        
+        // Цена 1 кг чистого растворителя для клея, руб
+        $this->glue_solvent_kg_price = $this->data_glue->solvent_price * self::GetCurrencyRate($this->data_glue->solvent_currency, $this->usd, $this->euro);
+        
+        // Цена 1 кг КлеяСмеси, руб
+        $this->mix_glue_kg_price = ((1 * $this->glue_kg_price) + ($this->data_glue->solvent_part * $this->glue_solvent_kg_price)) / $this->glue_kg_weight;
+        
+        // Площадь заклейки 2, м2
+        $this->glue_area2 = $this->length_dirty_2 * $this->lamination_roller_width / 1000;
+        
+        // Площадь заклейки 3, м2
+        $this->glue_area3 = $this->length_dirty_3 * $this->lamination_roller_width / 1000;
+        
+        // Расход КлеяСмеси 2, кг
+        // Если название плёнки начинается на "Pet", то используем расход краски для ламинации ПЭТ
+        if((strlen($this->film_1) > 3 && substr($this->film_1, 0, 3) == "Pet") || (strlen($this->film_2) > 3 && substr($this->film_2, 0, 3) == "Pet")) {
+            $this->glue_expense2 = $this->glue_area2 * $this->data_glue->glue_expense_pet / 1000;
+        }
+        else {
+            $this->glue_expense2 = $this->glue_area2 * $this->data_glue->glue_expense / 1000;
+        }
+        
+        // Расход КлеяСмеси 3, кг
+        // Если название плёнки начинается на "Pet", то используем расход краски для ламинации ПЭТ
+        if((strlen($this->film_2) > 3 && substr($this->film_2, 0, 3) == "Pet") || (strlen($this->film_3) > 3 && substr($this->film_3, 0, 3) == "Pet")) {
+            $this->glue_expense3 = $this->glue_area3 * $this->data_glue->glue_expense_pet / 1000;
+        }
+        else {
+            $this->glue_expense3 = $this->glue_area3 * $this->data_glue->glue_expense / 1000;
+        }
+        
+        // Стоимость КлеяСмеси 2, руб
+        $this->glue_cost2 = $this->glue_expense2 * $this->mix_glue_kg_price;
+        
+        // Стоимость КлеяСмеси 3, руб
+        $this->glue_cost3 = $this->glue_expense3 * $this->mix_glue_kg_price;
+        
+        //***********************************
+        // Стоимость форм
+        //***********************************
+        
+        // Высота форм, м
+        $this->cliche_height = ($this->raport + 20) / 1000;
+        
+        // Ширина форм, м
+        if(empty($this->stream_width)) {
+            $this->cliche_width = (array_sum($this->stream_widths) + 20 + ((!empty($this->ski_1) && $this->ski_1 == SKI_NO) ? 0 : 20)) / 1000;
+        }
+        else {
+            $this->cliche_width = ($this->streams_number * $this->stream_width + 20 + ((!empty($this->ski_1) && $this->ski_1 == SKI_NO) ? 0 : 20)) / 1000;
+        }
+        
+        // Площадь форм, м2
+        $this->cliche_area = $this->cliche_height * $this->cliche_width;
+        
+        // Создаём массив стоимостей каждой формы
+        $this->cliche_costs = array();
+        $this->cliche_costs_run2 = array();
+        
+        // Количество новых форм
+        $this->cliche_new_number = 0;
+        
+        // Перебираем все формы, определяем стоимость каждой, помещаем эту величину в массив
+        for($i = 1; $i <= $this->ink_number; $i++) {
+            $cliche = "cliche_$i";
+            
+            // Если форма не старая, то количество новых форм увеличиваем на 1
+            if(!empty($$cliche) && $$cliche != CLICHE_OLD) {
+                $this->cliche_new_number += 1;
+            }
+            
+            $cliche_sm_price = 0;
+            $cliche_currency = "";
+            
+            switch ($$cliche) {
+                case CLICHE_FLINT:
+                    $cliche_sm_price = $this->data_cliche->flint_price;
+                    $cliche_currency = $this->data_cliche->flint_currency;
+                    break;
+                
+                case CLICHE_KODAK:
+                    $cliche_sm_price = $this->data_cliche->kodak_price;
+                    $cliche_currency = $this->data_cliche->kodak_currency;
+                    break;
+            }
+            
+            // Стоимость формы, руб
+            $cliche_cost = $this->cliche_area * $cliche_sm_price * self::GetCurrencyRate($cliche_currency, $this->usd, $this->euro);
+            $this->cliche_costs[$i] = $cliche_cost;
+        }
+        
+        // Второй прогон
+        for($i = 1; $i <= $this->ink_run2_number; $i++) {
+            $cliche_run2 = "cliche_run2_$i";
+            
+            if(!empty($$cliche_run2) && $$cliche_run2 != CLICHE_OLD) {
+                $this->cliche_new_number += 1;
+            }
+            
+            $cliche_sm_price = 0;
+            $cliche_currency = "";
+            
+            switch($$cliche_run2) {
+                case CLICHE_FLINT:
+                    $cliche_sm_price = $this->data_cliche->flint_price;
+                    $cliche_currency = $this->data_cliche->flint_currency;
+                    break;
+                
+                case CLICHE_KODAK:
+                    $cliche_sm_price = $this->data_cliche->kodak_price;
+                    $cliche_currency = $this->data_cliche->kodak_currency;
+                    break;
+            }
+            
+            $cliche_cost = $this->cliche_area * $cliche_sm_price * self::GetCurrencyRate($cliche_currency, $this->usd, $this->euro);
+            $this->cliche_costs_run2[$i] = $cliche_cost;
+        }
+        
+        //********************************************
+        // Стоимость скотча
+        //********************************************
+        
+        // Стоимость скотча для каждой краски
+        $this->scotch_costs = array();
+        
+        for($i = 1; $i <= $this->ink_number; $i++) {
+            $this->scotch_costs[$i] = $this->cliche_area * $this->data_cliche->scotch_price * self::GetCurrencyRate($this->data_cliche->scotch_currency, $this->usd, $this->euro);
+        }
+        
+        $this->scotch_costs_run2 = array();
+        
+        for($i = 1; $i <= $this->ink_run2_number; $i++) {
+            $this->scotch_costs_run2[$i] = $this->cliche_area * $this->data_cliche->scotch_price * self::GetCurrencyRate($this->data_cliche->scotch_currency, $this->usd, $this->euro);
+        }
+        
+        // Общая себестоимость скотча
+        $this->scotch_cost = array_sum($this->scotch_costs) + array_sum($this->scotch_costs_run2);
+        
+        //********************************************
+        // НАЦЕНКА
+        //********************************************
+        
+        // Если имеющаяся наценка не пустая, оставляем её
+        // Если пустая, вычисляем
+        if(empty($this->extracharge)) { // !!!! Значение 0.000 не считается EMPTY
+            $this->extracharge = 0;
+            $ech_type = 0;
+            
+            if($this->work_type_id == WORK_TYPE_NOPRINT) {
+                $ech_type = ET_NOPRINT;
+            }
+            elseif($this->laminations_number == 0) {
+                $ech_type = ET_PRINT_NO_LAMINATION;
+            }
+            elseif($this->laminations_number == 1) {
+                $ech_type = ET_PRINT_1_LAMINATION;
+            }
+            elseif($this->laminations_number == 2) {
+                $ech_type = ET_PRINT_2_LAMINATIONS;
+            }
+            
+            foreach($this->data_extracharge as $item) {
+                if($item->ech_type == $ech_type && round($this->weight ?? 0) >= $item->min_weight && (round($this->weight ?? 0) <= $item->max_weight || empty($item->max_weight))) {
+                    $this->extracharge = $item->value;
+                }
+            }
+        }
+        
+        // Наценка на ПФ $this->extracharge_cliche
+        
+        // Если УКПФ = 1 (то есть, ПФ включены в себестоимость), то наценка на ПФ всегда 0
+        if($this->ukpf == 1) {
+            $this->extracharge_cliche = 0;
+        }
+        
+        //***********************************************
+        //ПРАВАЯ ПАНЕЛЬ
+        //***********************************************
+        
+        // Общая стоимость всех материалов
+        $this->film_cost = $this->film_cost_1 + $this->film_cost_2 + $this->film_cost_3;
+        
+        // Общая стоимость трудозатрат
+        $this->work_cost = $this->work_cost_1 + $this->work_cost_1_run2 + $this->work_cost_2 + $this->work_cost_3;
+        
+        // Общая стоимость всех КраскаСмеси
+        $this->ink_cost = 0;
+        
+        for($i = 1; $i <= $this->ink_number; $i++) {
+            $this->ink_cost += $this->ink_costs_final[$i];
+        }
+        
+        for($i = 1; $i <= $this->ink_run2_number; $i++) {
+            $this->ink_cost += $this->ink_costs_final_run2[$i];
+        }
+        
+        // Общий расход всех КраскаСмеси
+        $this->ink_expense = 0;
+        
+        for($i = 1; $i <= $this->ink_number; $i++) {
+            $this->ink_expense += $this->ink_expenses[$i];
+        }
+        
+        for($i = 1; $i <= $this->ink_run2_number; $i++) {
+            $this->ink_expense += $this->ink_expenses_run2[$i];
+        }
+        
+        // Общая стоимость всех КлеяСмеси
+        $this->glue_cost = $this->glue_cost2 + $this->glue_cost3;
+        
+        // Себестоимость ПФ
+        $this->cliche_cost = 0;
+        
+        for($i = 1; $i <= $this->ink_number; $i++) {
+            $this->cliche_cost += $this->cliche_costs[$i];
+        }
+        
+        for($i = 1; $i <= $this->ink_run2_number; $i++) {
+            $this->cliche_cost += $this->cliche_costs_run2[$i];
+        }
+        
+        // Отгрузочная стоимость ПФ
+        $this->shipping_cliche_cost = $this->cliche_cost * (1 + ($this->extracharge_cliche / 100)) * $this->ukcuspaypf * (($this->ukpf - 1) / -1);
+        
+        // Прибыль ПФ
+        $this->income_cliche = ($this->shipping_cliche_cost - $this->cliche_cost) * (($this->ukpf - 1) / -1);
+        
+        // Себестоимость
+        $this->cost = $this->film_cost + $this->work_cost + $this->ink_cost + $this->glue_cost + ($this->cliche_cost * $this->ukpf) + $this->scotch_cost + ($this->quantity * $this->extra_expense);
+        
+        // Себестоимость за единицу
+        $this->cost_per_unit = $this->cost / $this->quantity;
+        
+        // Отгрузочная стоимость
+        $this->shipping_cost = $this->cost * (1 + ($this->extracharge / 100));
+        
+        // Отгрузочная стоимость за единицу
+        $this->shipping_cost_per_unit = $this->shipping_cost / $this->quantity;
+        
+        if($this->extracharge != 0) {
+            // !!!! Корректируем отгрузочную стоимость, чтобы она точно равнялась стоимости за единицу (округлённой до 3), умноженной на размер тиража
+            $this->shipping_cost = round($this->shipping_cost_per_unit ?? 0, 3) * $this->quantity;
+        }
+        
+        // Прибыль
+        $this->income = ($this->shipping_cost - $this->cost);
+        
+        // Прибыль за единицу
+        $this->income_per_unit = $this->shipping_cost_per_unit - $this->cost_per_unit;
+        
+        // Масса плёнки с приладкой
+        $this->total_weight_dirty = $this->weight_dirty_1 + $this->weight_dirty_2 + $this->weight_dirty_3;
+        
+        // Стоимость плёнки на единицу
+        $this->film_cost_per_unit_1 = $this->price_1 * self::GetCurrencyRate($this->currency_1, $this->usd, $this->euro);
+        $this->film_cost_per_unit_2 = $this->price_2 * self::GetCurrencyRate($this->currency_2, $this->usd, $this->euro);
+        $this->film_cost_per_unit_3 = $this->price_3 * self::GetCurrencyRate($this->currency_3, $this->usd, $this->euro);
+        
+        // Отходы плёнки, стоимость
+        $this->film_waste_cost_1 = ($this->weight_dirty_1 - $this->weight_pure_1) * $this->price_1 * self::GetCurrencyRate($this->currency_1, $this->usd, $this->euro);
+        $this->film_waste_cost_2 = ($this->weight_dirty_2 - $this->weight_pure_2) * $this->price_2 * self::GetCurrencyRate($this->currency_2, $this->usd, $this->euro);
+        $this->film_waste_cost_3 = ($this->weight_dirty_3 - $this->weight_pure_3) * $this->price_3 * self::GetCurrencyRate($this->currency_3, $this->usd, $this->euro);
+        
+        // Отходы плёнки, масса
+        $this->film_waste_weight_1 = $this->weight_dirty_1 - $this->weight_pure_1;
+        $this->film_waste_weight_2 = $this->weight_dirty_2 - $this->weight_pure_2;
+        $this->film_waste_weight_3 = $this->weight_dirty_3 - $this->weight_pure_3;
+        
+        //***************************
+        // ДОПОЛНИТЕЛЬНО
+        //***************************
+        
+        // Этикеток в 1 м. пог.
+        if($this->work_type_id != WORK_TYPE_NOPRINT) {
+            $this->number_in_meter = 1 / $this->length * 1000;
+        }
+    }
+}
+
+// Расчёт для самоклеящейся бумаги
+class CalculationSelfAdhesive extends CalculationBase {
+    public $quantity = 0; // Суммарное количество этикеток
+    public $quantities_count = 0; // Количество тиражей
+    public $ukpf, $ukcuspaypf; // Уравнивающий коэффициент ПФ, ЗаказчикПлатитЗаПФ
+    public $ukknife, $ukcuspayknife; // Уравнивающий коэффициент нож, ЗаказчикПлатитЗаНож
+    
+    public $width_start = 0; // Ширина материала (начальная), мм
+    public $width_mat = 0; // Ширина материала (кратная 5), мм
+    public $length_label_dirty = 0; // Высота этикетки грязная
+    public $width_dirty = 0; // Ширина этикетки грязная
+    public $number_in_raport_dirty = 0; // Количество этикеток в рапорте грязный
+    public $number_in_raport_pure = 0; // Количество этикеток в рапорте чистый
+    public $gap = 0; // Фактический зазор между этикетками
+    
+    public $priladka_printing = 0; // Метраж приладки одного тиража, м
+    public $area_pure = 0; // М2 чистые, м2
+    public $length_pog_pure = 0; // М пог. чистые, м
+    public $waste_length = 0; // СтартСтопОтход, м
+    public $length_pog_dirty = 0; // М пог. грязные, м
+    public $area_dirty = 0; // М2 грязные, м2
+    
+    public $weight_pure = 0; // Масса плёнки чистая (без приладки), кг
+    public $length_pure = 0; // Длина плёнки чистая, м
+    public $weight_dirty = 0; // Масса плёнки грязная (с приладкой), кг
+    public $length_dirty = 0; // Длина плёнки грязная, м
+    
+    public $film_cost = 0; // Себестоимость грязная
+    public $priladka_time = 0; // Приладка Время, ч
+    public $print_time = 0; // Время печати тиража, без приладки, ч
+    public $work_time = 0; // Общее время выполнения тиража, ч
+    public $work_cost = 0; // Стоимость выполнения, руб
+    
+    public $print_area = 0; // М2 запечатки, м2
+    public $ink_1kg_mix_weight = 0; // Масса краски в смеси, кг
+    public $ink_etoxypropanol_kg_price = 0; // Цена 1 кг чистого этоксипропанола
+    
+    public $vaporization_area_dirty; // м2 испарения грязная
+    public $vaporization_area_pure; // м2 испарения чистая
+    public $vaporization_expense; // расход испарения растворителя, кг
+    
+    public $ink_kg_prices; // массив: цена 1 кг каждой чистой краски
+    public $mix_ink_kg_prices; // массив: цена 1 кг каждой краскаСмеси
+    public $ink_expenses; // массив: расход каждой КраскаСмеси
+    public $ink_costs; // массив: стоимость каждой КраскаСмеси
+    public $ink_costs_mix; // массив: расход краска + растворитель каждой краски
+    public $ink_costs_final; // массив: стоимость каждой КраскаСммеси финальная
+    
+    public $cliche_height; // Высота формы, мм
+    public $cliche_width; // ширина формы, мм
+    public $cliche_area; // площадь формы, мм
+    public $cliche_flint_price; // себестоимость формы Флинт, руб
+    public $cliche_kodak_price; // себестоимость формы Кодак, руб
+    public $cliche_all_flint_price; // себестоимость всех форм Флинт, руб
+    public $cliche_all_kodak_price; // себестоимость всех форм Кодак, руб
+    public $cliche_new_number; // количество новых форм
+    public $scotch_costs; // массив: стоимость скотча
+    public $scotch_cost; // общая себестоимость скотча
+    
+    public $extracharge = 0; // Наценка на тираж
+    public $extracharge_cliche = 0; // Наценка на ПФ
+    public $extracharge_knife = 0; // Наценка на нож
+    public $ink_cost; // стоимость красок
+    public $ink_expense; // расход красок
+    public $cost; // себестоимость
+    public $cost_per_unit; // себестоимость за единицу
+    public $cliche_cost; // себестоимость форм
+    public $knife_cost; // себестоимость ножа
+    public $shipping_cost; // отгрузочная стоимость
+    public $shipping_cost_per_unit; // отгрузочная стоимость за диницу
+    public $shipping_cliche_cost; // отгрузочная стоимость ПФ
+    public $shipping_knife_cost; // отгрузочная стоимость ножа
+    public $income; // прибыль
+    public $income_per_unit; // прибыль за единицу
+    public $income_cliche; // прибыль ПФ
+    public $income_knife; // прибыль на нож
+    public $total_weight_dirty; // общая масса с приладкой
+    public $film_cost_per_unit; // Масса с приладкой на 1 кг
+    public $film_waste_cost; // отходы, стоимость
+    public $film_waste_weight; // отходы, масса
+    public $total_extra_expense; // Общие дополнительные расходы
+    
+    public $lengths; // Длины тиражей
+    
+    public $number_in_meter; // Этикеток в 1 м. пог.
+
+    public function __construct(DataPriladka $data_priladka, 
+            DataPriladka $data_priladka_laminator,
+            DataMachine $data_machine,
+            DataGap $data_gap,
+            DataLaminator $data_laminator,
+            DataInk $data_ink,
+            DataGlue $data_glue,
+            DataCliche $data_cliche,
+            array $data_extracharge,
+            $usd, // Курс доллара
+            $euro, // Курс евро
+            $weight_cut, // Сколько нарезано в кг
+            $length_cut, // Сколько нарезано в м
+            
+            $date, // Дата
+            $customer_id, // ID заказчика
+            $name, // Наименование
+            $unit, // Кг или шт
+            $quantity, // Размер тиража в кг или шт
+            array $quantities, // Размер тиража в шт
+            $work_type_id, // Тип работы: с печатью или без печати
+        
+            $film_1, // Основная пленка, марка
+            $thickness_1, // Основная пленка, толщина, мкм
+            $density_1, // Основная пленка, плотность, г/м2
+            $price_1, // Основная пленка, цена
+            $currency_1, // Основная пленка, валюта
+            $eco_price_1, // Основная пленка, экосбор
+            $eco_currency_1, // Основная пленка, валюта экосбора
+            $customers_material_1, // Основная плёнка, другая, материал заказчика
+            $ski_1, // Основная пленка, лыжи
+            $width_ski_1, // Основная пленка, ширина пленки, мм
+        
+            $film_2, // Ламинация 1, марка
+            $thickness_2, // Ламинация 1, толщина, мкм
+            $density_2, // Ламинация 1, плотность, г/м2
+            $price_2, // Ламинация 1, цена
+            $currency_2, // Ламинация 1, валюта
+            $eco_price_2, // Ламинация 1, экосбор
+            $eco_currency_2, // Ламинация 1, валюта экосбора
+            $customers_material_2, // Ламинация 1, другая, материал заказчика
+            $ski_2, // Ламинация 1, лыжи
+            $width_ski_2, // Ламинация 1, ширина пленки, мм
+        
+            $film_3, // Ламинация 2, марка
+            $thickness_3, // Ламинация 2, толщина, мкм
+            $density_3, // Ламинация 2, плотность, г/м2
+            $price_3, // Ламинация 2, цена
+            $currency_3, // Ламинация 2, валюта
+            $eco_price_3, // Ламинация 2, экосбор
+            $eco_currency_3, // Ламинация 2, валюта экосбора
+            $customers_material_3, // Ламинация 2, другая, уд. вес
+            $ski_3, // Ламинация 2, лыжи
+            $width_ski_3,  // Ламинация 2, ширина пленки, мм
+        
+            $machine_id, // ID машины
+            $laminator_id, // ID ламинатора
+            $length, // Длина этикетки, мм
+            $stream_width, // Ширина ручья, мм
+            array $stream_widths, // Ширины ручьёв, мм, если они неодинаковые
+            $streams_number, // Количество ручьёв
+            $raport, // Рапорт
+            $number_in_raport, // Кол-во этикеток в рапорте
+            $lamination_roller_width, // Ширина ламинирующего вала
+            $ink_number, // Красочность
+            $ink_run2_number, // Красочность, второй прогон
+            $manager_id, // ID менеджера
+            
+            $ink_1, $ink_2, $ink_3, $ink_4, $ink_5, $ink_6, $ink_7, $ink_8, // Тип краски (CMYK, пантон, белая, лак)
+            $color_1, $color_2, $color_3, $color_4, $color_5, $color_6, $color_7, $color_8, // Номер пантона
+            $cmyk_1, $cmyk_2, $cmyk_3, $cmyk_4, $cmyk_5, $cmyk_6, $cmyk_7, $cmyk_8, // Тип CMYK (cyan, magenda, yellow, kontur)
+            $lacquer_1, $lacquer_2, $lacquer_3, $lacquer_4, $lacquer_5, $lacquer_6, $lacquer_7, $lacquer_8, // Тип лака (глянцевый, матовый)
+            $percent_1, $percent_2, $percent_3, $percent_4, $percent_5, $percent_6, $percent_7, $percent_8, // Процент данной краски
+            $cliche_1, $cliche_2, $cliche_3, $cliche_4, $cliche_5, $cliche_6, $cliche_7, $cliche_8, // Форма (старая, Флинт, Кодак)
+            
+            $ink_run2_1, $ink_run2_2, $ink_run2_3, $ink_run2_4, // Тип краски, второй прогон
+            $color_run2_1, $color_run2_2, $color_run2_3, $color_run2_4, // Номер пантона, второй прогон
+            $cmyk_run2_1, $cmyk_run2_2, $cmyk_run2_3, $cmyk_run2_4, // Тип CMYK, второй прогон
+            $lacquer_run2_1, $lacquer_run2_2, $lacquer_run2_3, $lacquer_run2_4, // Тип лака, второй прогон
+            $percent_run2_1, $percent_run2_2, $percent_run2_3, $percent_run2_4, // Процент данной краски, второй прогон
+            $cliche_run2_1, $cliche_run2_2, $cliche_run2_3, $cliche_run2_4, // Форма, второй прогон
+            
+            $cliche_in_price, // Включить ПФ в себестоимость
+            $cliches_count_flint, // Количество форм Флинт
+            $cliches_count_kodak, // Количество форм Кодак
+            $cliches_count_old, // Количество старых форм
+            $extracharge, // Наценка на тираж
+            $extracharge_cliche, // Наценка на ПФ
+            $customer_pays_for_cliche, // Заказчик платит за ПФ
+            $knife, // Стоимость ножа
+            $extracharge_knife, // Наценка на нож
+            $knife_in_price, // Нож включается в стоимость
+            $customer_pays_for_knife, // Заказчик платит за нож
+            $extra_expense, // Дополнительные расходы с кг/шт
+            
+            $requirement1, // Требования по материалу 1
+            $requirement2, // Требования по материалу 2
+            $requirement3, // Требования по материалу 3
+            $cut_priladka, // Приладка на резке
+            
+            $customer, // Заказчик
+            $last_name, // Фамилия менеджера
+            $first_name, // Имя менеджера
+            $status_id, // Статус
+            $status_comment, // Комментарий к статусу
+            $status_date, // Дата установления статуса
+            $num_for_customer // Номер заказа для данного заказчика
+            ) {
+        parent::__construct($data_priladka, $data_priladka_laminator, $data_machine, $data_gap, $data_laminator, $data_ink, $data_glue, $data_cliche, $data_extracharge, 
+                $usd, $euro, $weight_cut, $length_cut,
+                $date, $customer_id, $name, $unit, $quantity, $quantities, $work_type_id, 
+                $film_1, $thickness_1, $density_1, $price_1, $currency_1, $eco_price_1, $eco_currency_1, $customers_material_1, $ski_1, $width_ski_1, 
+                $film_2, $thickness_2, $density_2, $price_2, $currency_2, $eco_price_2, $eco_currency_2, $customers_material_2, $ski_2, $width_ski_2, 
+                $film_3, $thickness_3, $density_3, $price_3, $currency_3, $eco_price_3, $eco_currency_3, $customers_material_3, $ski_3, $width_ski_3, 
+                $machine_id, $laminator_id, $length, $stream_width, $stream_widths, $streams_number, $raport, $number_in_raport, $lamination_roller_width, $ink_number, $ink_run2_number, $manager_id, 
+                $ink_1, $ink_2, $ink_3, $ink_4, $ink_5, $ink_6, $ink_7, $ink_8, 
+                $color_1, $color_2, $color_3, $color_4, $color_5, $color_6, $color_7, $color_8, 
+                $cmyk_1, $cmyk_2, $cmyk_3, $cmyk_4, $cmyk_5, $cmyk_6, $cmyk_7, $cmyk_8, 
+                $lacquer_1, $lacquer_2, $lacquer_3, $lacquer_4, $lacquer_5, $lacquer_6, $lacquer_7, $lacquer_8, 
+                $percent_1, $percent_2, $percent_3, $percent_4, $percent_5, $percent_6, $percent_7, $percent_8, 
+                $cliche_1, $cliche_2, $cliche_3, $cliche_4, $cliche_5, $cliche_6, $cliche_7, $cliche_8, 
+                $ink_run2_1, $ink_run2_2, $ink_run2_3, $ink_run2_4, 
+                $color_run2_1, $color_run2_2, $color_run2_3, $color_run2_4, 
+                $cmyk_run2_1, $cmyk_run2_2, $cmyk_run2_3, $cmyk_run2_4, 
+                $lacquer_run2_1, $lacquer_run2_2, $lacquer_run2_3, $lacquer_run2_4, 
+                $percent_run2_1, $percent_run2_2, $percent_run2_3, $percent_run2_4, 
+                $cliche_run2_1, $cliche_run2_2, $cliche_run2_3, $cliche_run2_4, 
+                $cliche_in_price, $cliches_count_flint, $cliches_count_kodak, $cliches_count_old, $extracharge, $extracharge_cliche, $customer_pays_for_cliche, 
+                $knife, $extracharge_knife, $knife_in_price, $customer_pays_for_knife, $extra_expense, 
+                $requirement1, $requirement2, $requirement3, $cut_priladka, 
+                $customer, $last_name, $first_name, $status_id, $status_comment, $status_date, $num_for_customer);
+        
+        // Суммарный размер тиража
+        $this->quantity = array_sum($quantities);
+        
+        // Количество тиражей
+        $this->quantities_count = count($quantities);
+        
+        // Если материал заказчика, то цена его = 0
+        if($this->customers_material_1 == true) $this->price_1 = 0;
+        
+        // Уравнивающий коэфф. ПФ (УКПФ)=0, когда ПФ не включен в стоимость, =1, когда ПФ включен в стоимость
+        $this->ukpf = $this->cliche_in_price == 1 ? 1 : 0;
+        
+        // Уравнивающий коэффициент ЗаказчикПлатитЗаПФ: когда платит заказчик = 1, когда платим мы = 0
+        $this->ukcuspaypf = $this->customer_pays_for_cliche == 1 ? 1 : 0;
+        
+        // Уравнивающий коэфф. нож (УКНОЖ)=0, когда нож не включен в стоимость, =1, когда нож включен в стоимость
+        $this->ukknife = $this->knife_in_price == 1 ? 1 : 0;
+        
+        // Уравнивающий коэфф. ЗаказчикПлатитЗаНож: когда платит заказчик = 1, когда платим мы = 0
+        $this->ukcuspayknife = $this->customer_pays_for_knife == 1 ? 1 : 0;
+        
+        // НИЖЕ НАЧИНАЕТСЯ ВЫЧИСЛЕНИЕ
+        
+        // Ширина материала (начальная), мм
+        // Если стадартные лыжи: (количество ручьёв * (ширина ручья + расстояние между ручьями)) + (ширина одной лыжи * 2)
+        // Если нестандартные лыжи: ширина материала вводится вручную
+        switch ($this->ski_1) {
+            case SKI_STANDARD:
+                $this->width_start = ($this->streams_number * ($this->stream_width + $this->data_gap->gap_stream)) + ($this->data_gap->ski * 2);
+                break;
+            
+            case SKI_NONSTANDARD:
+                $this->width_start = $this->width_ski_1;
+                break;
+            
+            default :
+                $this->width_start = 0;
+                break;
+        }
+        
+        // Ширина материала (кратная 5), мм
+        $this->width_mat = ceil($this->width_start / 5) * 5;
+        
+        // Высота этикетки грязная, мм
+        $this->length_label_dirty = $this->length + $this->data_gap->gap_raport;
+        
+        // Ширина этикетки грязная, мм
+        $this->width_dirty = $this->stream_width + $this->data_gap->gap_stream;
+        
+        // Количество этикеток в рапорте грязное
+        $this->number_in_raport_dirty = $this->raport / $this->length_label_dirty;
+        
+        // Количество этикеток в рапорте чистое
+        $this->number_in_raport_pure = floor($this->number_in_raport_dirty);
+        
+        // Защита от деления на ноль
+        if($this->number_in_raport_pure == 0) $this->number_in_raport_pure = 1;
+        
+        // Фактический зазор, мм
+        $this->gap = ($this->raport - ($this->length * $this->number_in_raport_pure)) / $this->number_in_raport_pure;
+        
+        //***************************
+        // Рассчёт по КГ
+        //***************************
+        
+        // Метраж приладки одного тиража, м
+        $this->priladka_printing = ($this->ink_number * $this->data_priladka->length) + $this->data_priladka->stamp;
+        
+        // М2 чистые, м2
+        $this->area_pure = ($this->length + $this->gap) * ($this->stream_width + $this->data_gap->gap_stream) * $this->quantity / 1000000;
+        
+        // М. пог. чистые, м
+        $this->length_pog_pure = $this->area_pure / ($this->width_dirty * $this->streams_number / 1000);
+        
+        // СтартСтопОтход, м
+        $this->waste_length = $this->data_priladka->waste_percent * $this->length_pog_pure / 100;
+        
+        // М пог. грязные, м
+        $this->length_pog_dirty = $this->length_pog_pure + ($this->quantities_count * $this->priladka_printing) + $this->waste_length;
+        
+        // М2 грязные, м2
+        $this->area_dirty = $this->length_pog_dirty * $this->width_mat / 1000;
+        
+        //***************************
+        // Массы и длины плёнок
+        //***************************
+        
+        // Масса плёнки чистая (без приладки), кг
+        $this->weight_pure = $this->length_pog_pure * $this->width_mat * $this->density_1 / 1000000;
+        
+        // Длина плёнки чистая, м
+        $this->length_pure = $this->length_pog_pure;
+        
+        // Масса плёнки грязная (с приладкой), кг
+        $this->weight_dirty = $this->area_dirty * $this->density_1 / 1000;
+        
+        // Длина плёнки грязная, м
+        $this->length_dirty = $this->length_pog_dirty;
+        
+        //*****************************
+        // Себестоимость плёнок
+        //*****************************
+        
+        // Себестоимость плёнки грязная (с приладкой), руб
+        $this->film_cost = ($this->area_dirty * $this->price_1 * self::GetCurrencyRate($this->currency_1, $this->usd, $this->euro)) + ($this->area_dirty * $this->density_1 * $this->eco_price_1 * self::GetCurrencyRate($this->eco_currency_1, $this->usd, $this->euro) / 1000);
+        
+        //*****************************
+        // Время - деньги
+        //*****************************
+        
+        // Время приладки, ч
+        $this->priladka_time = $this->ink_number * $this->data_priladka->time / 60 * $this->quantities_count;
+        
+        // Время печати тиража, без приладки, ч
+        $this->print_time = ($this->length_pog_pure + $this->waste_length) / $this->data_machine->speed / 1000;
+        
+        // Общее время выполнения тиража, ч
+        $this->work_time = $this->priladka_time + $this->print_time;
+        
+        // Стоимость выполнения, руб
+        $this->work_cost = $this->work_time * $this->data_machine->price;
+        
+        //************************
+        // Расход краски
+        //************************
+        
+        // М2 запечатки, м2
+        $this->print_area = (($this->stream_width + $this->data_gap->gap_stream) * ($this->length + $this->data_gap->gap_raport) * $this->quantity / 1000000) + ($this->length_pog_dirty * 0.01);
+        
+        // Масса краски в смеси, кг
+        $this->ink_1kg_mix_weight = 1 + $this->data_ink->solvent_part;
+        
+        // Цена 1 кг чистого этоксипропанола, руб
+        $this->ink_etoxypropanol_kg_price = $this->data_ink->solvent_etoxipropanol_price * self::GetCurrencyRate($this->data_ink->solvent_etoxipropanol_currency, $this->usd, $this->euro);
+        
+        
+        // М2 испарения грязная, м2
+        $this->vaporization_area_dirty = $this->data_machine->width * $this->length_pog_dirty / 100;
+        
+        // М2 испарения чистая, м2
+        $this->vaporization_area_pure = $this->vaporization_area_dirty - $this->print_area;
+        
+        // Расход испарения растворителя, кг
+        $this->vaporization_expense = $this->vaporization_area_pure * $this->data_machine->vaporization_expense;
+        
+        
+        // Создаём массив цен за 1 кг каждой краски
+        $this->ink_kg_prices = array();
+        
+        // Создаём массив цен за 1 кг каждой КраскаСмеси
+        $this->mix_ink_kg_prices = array();
+        
+        // Создаём массив расходов каждой КраскаСмеси
+        $this->ink_expenses = array();
+        
+        // Создаём массив стоимостей каждой КраскаСмеси
+        $this->ink_costs = array();
+        
+        // Создаём массив расходов краска + растворитель
+        $this->ink_costs_mix = array();
+        
+        // Создаём массив финальных стоимостей каждой КраскаСмеси
+        $this->ink_costs_final = array();
+        
+        // Перебираем все краски и помещаем в каждый из четырёх массивов данные по каждой краске
+        for($i = 1; $i <= $this->ink_number; $i++) {
+            $ink = "ink_$i";
+            $cmyk = "cmyk_$i";
+            $lacquer = "lacquer_$i";
+            $percent = "percent_$i";
+            
+            // Поскольку в самоклейке лак используется без растворителя, для лака используем другой расчёт
+            if($$ink == INK_LACQUER) {
+                // Цена 1 кг чистой краски, руб
+                $ink_kg_price = $this->data_ink->self_adhesive_laquer_price * self::GetCurrencyRate($this->data_ink->self_adhesive_laquer_currency, $this->usd, $this->euro);
+                $this->ink_kg_prices[$i] = $ink_kg_price;
+                
+                // Расход чистой краски, кг
+                $ink_expense = $this->print_area * $this->data_ink->self_adhesive_laquer_expense * $$percent / 1000 / 100;
+                $this->ink_expenses[$i] = $ink_expense;
+                
+                // Стоимость чистой краски, руб
+                $ink_cost = $ink_expense * $ink_kg_price;
+                $this->ink_costs[$i] = $ink_cost;
+                
+                // Поскольку здесь лак используется без растворителя, то стоимость финальная не меняется
+                $this->ink_costs_final[$i] = $this->ink_costs[$i];
+            }
+            else {
+                // Цена 1 кг чистой краски, руб
+                $ink_price = $this->GetInkPrice($$ink, $$cmyk, $$lacquer, $this->data_ink->c_price, $this->data_ink->c_currency, $this->data_ink->m_price, $this->data_ink->m_currency, $this->data_ink->y_price, $this->data_ink->y_currency, $this->data_ink->k_price, $this->data_ink->k_currency, $this->data_ink->panton_price, $this->data_ink->panton_currency, $this->data_ink->white_price, $this->data_ink->white_currency, $this->data_ink->lacquer_glossy_price, $this->data_ink->lacquer_glossy_currency, $this->data_ink->lacquer_matte_price, $this->data_ink->lacquer_matte_currency, $this->data_ink->lacquer_selective_price, $this->data_ink->lacquer_selective_currency);
+                $ink_kg_price = $ink_price->value * self::GetCurrencyRate($ink_price->currency, $this->usd, $this->euro);
+                $this->ink_kg_prices[$i] = $ink_kg_price;
+            
+                // Цена 1 кг КраскаСмеси, руб
+                $mix_ink_kg_price = (($ink_kg_price * 1) + ($this->ink_etoxypropanol_kg_price * $this->data_ink->solvent_part)) / $this->ink_1kg_mix_weight;
+                $this->mix_ink_kg_prices[$i] = $mix_ink_kg_price;
+            
+                // Расход КраскаСмеси, кг
+                $ink_expense = $this->print_area * $this->GetInkExpense($$ink, $$cmyk, $$lacquer, $this->data_ink->c_expense, $this->data_ink->m_expense, $this->data_ink->y_expense, $this->data_ink->k_expense, $this->data_ink->panton_expense, $this->data_ink->white_expense, $this->data_ink->lacquer_glossy_expense, $this->data_ink->lacquer_matte_expense, $this->data_ink->lacquer_selective_expense) * $$percent / 1000 / 100;
+                $this->ink_expenses[$i] = $ink_expense;
+            
+                // Стоимость КраскаСмеси, руб
+                $ink_cost = $ink_expense * $mix_ink_kg_price;
+                $this->ink_costs[$i] = $ink_cost;
+                
+                // Расходы (КраскаСмеси на одну краску), руб
+                $this->ink_costs_mix[$i] = $this->ink_costs[$i];
+                
+                // Стоимость КраскаСмеси финальная, руб
+                if($this->ink_costs_mix[$i] < $this->data_ink->min_price_per_ink) {
+                    $this->ink_costs_final[$i] = floatval($this->data_ink->min_price_per_ink);
+                }
+                else {
+                    $this->ink_costs_final[$i] = floatval($this->ink_costs_mix[$i]);
+                }
+            }
+        }
+        
+        //********************************
+        // Стоимость форм
+        //********************************
+        
+        // Высота форм, м
+        $this->cliche_height = ($this->raport + 20) / 1000;
+        
+        // Ширина форм, м (для самоклейки без лыж не бывает)
+        $this->cliche_width = ($this->streams_number * $this->width_dirty + 20 + 20) / 1000;
+        
+        // Площадь форм, м2
+        $this->cliche_area = $this->cliche_height * $this->cliche_width;
+        
+        // Себестоимость 1 формы Флинт, руб
+        $this->cliche_flint_price = $this->cliche_area * $this->data_cliche->flint_price * self::GetCurrencyRate($this->data_cliche->flint_currency, $this->usd, $this->euro);
+        
+        // Себестоимость 1 формы Кодак, руб
+        $this->cliche_kodak_price = $this->cliche_area * $this->data_cliche->kodak_price * self::GetCurrencyRate($this->data_cliche->kodak_currency, $this->usd, $this->euro);
+        
+        // Себестоимость всех форм Флинт, руб
+        $this->cliche_all_flint_price = $this->cliches_count_flint * $this->cliche_flint_price;
+        
+        // Себестоимость всех форм Кодак, руб
+        $this->cliche_all_kodak_price = $this->cliches_count_kodak * $this->cliche_kodak_price;
+        
+        // Количество новых форм
+        $this->cliche_new_number = $this->cliches_count_flint + $this->cliches_count_kodak;
+        
+        //********************************************
+        // Стоимость скотча
+        //********************************************
+        
+        // Стоимость скотча для каждой краски
+        $this->scotch_costs = array();
+        
+        for($i = 1; $i <= $this->ink_number; $i++) {
+            $this->scotch_costs[$i] = $this->cliche_area * $this->data_cliche->scotch_price * self::GetCurrencyRate($this->data_cliche->scotch_currency, $this->usd, $this->euro);
+        }
+        
+        // Общая себестоимость скотча
+        $this->scotch_cost = array_sum($this->scotch_costs);
+        
+        //********************************
+        // НАЦЕНКА
+        //********************************
+        
+        // Если имеющаяся наценка не пустая, оставляем её
+        // Если пустая, высисляем
+        if(empty($this->extracharge)) { // !!!! Значение 0.000 не считается EMPTY
+            $this->extracharge = 0;
+            $ech_type = ET_SELF_ADHESIVE;
+            
+            foreach($this->data_extracharge as $item) {
+                if($item->ech_type == $ech_type && round($this->weight_dirty ?? 0) >= $item->min_weight && (round($this->weight_dirty ?? 0) <= $item->max_weight || empty($item->max_weight))) {
+                    $this->extracharge = $item->value;
+                }
+            }
+        }
+        
+        // Наценка на ПФ: $this->extracharge_cliche
+        
+        // Если УКПФ = 1, то наценка на ПФ всегда 0
+        if($this->ukpf == 1) {
+            $this->extracharge_cliche = 0;
+        }
+        
+        // Наценка на нож: $this->extracharge_knife
+        
+        // Если УКНОЖ = 1, то наценка на нож всегда 0
+        if($this->ukknife == 1) {
+            $this->extracharge_knife = 0;
+        }
+        
+        //*********************************
+        // ПРАВАЯ ПАНЕЛЬ
+        //*********************************
+        
+        // Общая стоимость всех КраскаСмеси
+        $this->ink_cost = 0;
+        
+        for($i = 1; $i <= $this->ink_number; $i++) {
+            $this->ink_cost += $this->ink_costs_final[$i];
+        }
+        
+        // Общий расход всех КраскаСмеси
+        $this->ink_expense = 0;
+        
+        for($i = 1; $i <= $this->ink_number; $i++) {
+            $this->ink_expense += $this->ink_expenses[$i];
+        }
+        
+        // Себестоимость ПФ
+        $this->cliche_cost = $this->cliche_all_flint_price + $this->cliche_all_kodak_price;
+        
+        // Отгрузочная стоимость ПФ
+        $this->shipping_cliche_cost = $this->cliche_cost * (1 + ($this->extracharge_cliche / 100)) * $this->ukcuspaypf * (($this->ukpf - 1) / -1);
+        
+        // Прибыль ПФ
+        $this->income_cliche = ($this->shipping_cliche_cost - $this->cliche_cost) * (($this->ukpf - 1) / -1);
+        
+        // Себестоимость ножа
+        $this->knife_cost = $this->knife;
+        
+        // Отгрузочная стоимость ножа
+        $this->shipping_knife_cost = $this->knife_cost * (1 + ($this->extracharge_knife / 100)) * $this->ukcuspayknife * (($this->ukknife - 1) / -1);
+        
+        // Прибыль на нож
+        $this->income_knife = ($this->shipping_knife_cost - $this->knife_cost) * (($this->ukknife - 1) / -1);
+        
+        // Себестоимость
+        $this->cost = $this->film_cost + $this->work_cost + $this->ink_cost + ($this->cliche_cost * $this->ukpf) + ($this->knife_cost * $this->ukknife) + $this->scotch_cost + ($this->extra_expense * $this->quantity);
+        
+        // Себестоимость за единицу
+        $this->cost_per_unit = $this->cost / $this->quantity;
+        
+        // Отгрузочная стоимость
+        $this->shipping_cost = $this->cost * (1 + ($this->extracharge / 100));
+        
+        // Отгрузочная стоимость за единицу
+        $this->shipping_cost_per_unit = $this->shipping_cost / $this->quantity;
+        
+        if($this->extracharge != 0) {
+            // !!!! Корректируем отгрузочную стоимость, чтобы она точно равнялась стоимости за единицу (округлённой до 3), умноженной на размер тиража
+            $this->shipping_cost = round($this->shipping_cost_per_unit ?? 0, 3) * $this->quantity;
+        }
+        
+        // Прибыль
+        $this->income = $this->shipping_cost - $this->cost;
+        
+        // Прибыль за единицу
+        $this->income_per_unit = $this->shipping_cost_per_unit - $this->cost_per_unit;
+        
+        // Масса плёнки с приладкой
+        $this->total_weight_dirty = $this->weight_dirty;
+        
+        // Стоимость плёнки за единицу
+        $this->film_cost_per_unit = $this->price_1 * self::GetCurrencyRate($this->currency_1, $this->usd, $this->euro);
+        
+        // Отходы плёнки, стоимость
+        $this->film_waste_cost = ($this->weight_dirty - $this->weight_pure) * $this->price_1 * self::GetCurrencyRate($this->currency_1, $this->usd, $this->euro);
+        
+        // Отходы плёнки, масса
+        $this->film_waste_weight = $this->weight_dirty - $this->weight_pure;
+        
+        // Длины тиражей
+        $this->lengths = array();
+        
+        foreach($quantities as $key => $quantity) {
+            $this->lengths[$key] = ($this->length + $this->gap) * $quantities[$key] / $this->streams_number / 1000;
+        }
+        
+        //***************************
+        // ДОПОЛНИТЕЛЬНО
+        //***************************
+        
+        // Этикеток в 1 м. пог.
+        $this->number_in_meter = $this->number_in_raport_pure / $this->raport * 1000;
+    }
+}
+?>

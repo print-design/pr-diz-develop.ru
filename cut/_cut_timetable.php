@@ -1,0 +1,161 @@
+<?php
+require_once '../include/topscripts.php';
+require_once './_cut_date.php';
+
+class CutTimetable {
+    public $machine_id;
+    public $dateFrom;
+    public $dateTo;
+    public $cut_dates = array();
+    public $employees = array();
+    public $workshifts = array();
+    public $editions = array();
+    
+    // Имеется ли хоть одна работа со статусом "Приладка на резке"
+    public $has_priladka = false;
+    
+    // Имеется ли хоть одна работа со статусом "Режется"
+    public $has_take = false;
+    
+    public function __construct($machine_id, $dateFrom, $dateTo) {
+        $this->machine_id = $machine_id;
+        $this->dateFrom = $dateFrom;
+        $this->dateTo = $dateTo;
+        
+        // Работники
+        $sql = "select id, first_name, last_name, role_id, active from plan_employee order by last_name, first_name";
+        $fetcher = new Fetcher($sql);
+        while($row = $fetcher->Fetch()) {
+            $this->employees[$row['id']] = array("first_name" => mb_substr($row['first_name'], 0, 1).'.', "last_name" => $row['last_name'], "role_id" => $row['role_id'], "active" => $row['active']);
+        }
+        
+        // Работники1
+        $sql = "select ws.date, ws.shift, e.id, e.first_name, e.last_name "
+                . "from plan_workshift1 ws "
+                . "left join plan_employee e on ws.employee1_id = e.id "
+                . "where ws.work_id = ".WORK_CUTTING." and ws.machine_id = ".$this->machine_id
+                . " and ws.date >= '".$this->dateFrom->format('Y-m-d')."' and ws.date <= '".$this->dateTo->format('Y-m-d')."'";
+        $fetcher = new Fetcher($sql);
+        while($row = $fetcher->Fetch()) {
+            $this->workshifts[$row['date'].'_'.$row['shift']] = $row['id'];
+        }
+        
+        // Кнопка "Приступить" имеется только в самой верхней работе под статусом "В плане резки",
+        // и только если нет ни одной работы в статусе "Приладка на резке".
+        $button_start = true;
+        
+        // Тиражи
+        $sql = "select e.id id, e.date, e.shift, ".PLAN_TYPE_EDITION." as type, if(isnull(e.worktime_continued), 0, 1) as has_continuation, ifnull(e.worktime_continued, e.worktime) worktime, e.position, e.comment, c.id calculation_id, c.name calculation, c.raport, c.length, c.unit, c.quantity, "
+                . "(select sum(quantity) from calculation_quantity where calculation_id = c.id) quantity_sum, "
+                . "(select gap_raport from norm_gap where date <= c.date order by id desc limit 1) as gap_raport, "
+                . "if(isnull(e.worktime_continued), round(cr.length_pure_1), round(cr.length_pure_1) / e.worktime * e.worktime_continued) as length_pure_1, "
+                . "if(isnull(e.worktime_continued), round(cr.length_dirty_1), round(cr.length_dirty_1) / e.worktime * e.worktime_continued) as length_dirty_1, "
+                . "cr.width_1, c.work_type_id, c.customer_id, cus.name customer, c.manager_id, u.first_name, u.last_name, "
+                . "ifnull((select sum(length) from calculation_take_stream where calculation_take_id in (select id from calculation_take where calculation_id = c.id)), 0) "
+                . "+ ifnull((select sum(length) from calculation_not_take_stream where calculation_stream_id in (select id from calculation_stream where calculation_id = c.id)), 0) length_cut, "
+                . "ifnull((select sum(weight) from calculation_take_stream where calculation_take_id in (select id from calculation_take where calculation_id = c.id)), 0) "
+                . "+ ifnull((select sum(weight) from calculation_not_take_stream where calculation_stream_id in (select id from calculation_stream where calculation_id = c.id)), 0) weight_cut, "
+                . "(select status_id from calculation_status_history where calculation_id = c.id order by date desc limit 1) status_id, "
+                . "(select comment from calculation_status_history where calculation_id = c.id order by date desc limit 1) status_comment, "
+                . "(select count(id) from calculation where customer_id = c.customer_id and id <= c.id) num_for_customer, "
+                . "(select count(id) from calculation_stream where calculation_id = c.id and (image1 <> '' or image2 <> '')) "
+                . "+ (select count(id) from calculation_quantity where calculation_id = c.id and (image1 <> '' or image2 <> '')) as images_count "
+                . "from plan_edition e "
+                . "inner join calculation c on e.calculation_id = c.id "
+                . "inner join calculation_result cr on cr.calculation_id = c.id "
+                . "inner join customer cus on c.customer_id = cus.id "
+                . "inner join user u on c.manager_id = u.id "
+                . "where e.work_id = ".WORK_CUTTING." and e.machine_id = ".$this->machine_id." and e.date >= '".$this->dateFrom->format('Y-m-d')."' and e.date <= '".$this->dateTo->format('Y-m-d')."' "
+                . "and (select count(id) from calculation_stream where calculation_id = c.id) > 0 "
+                . "union "
+                . "select pc.id, pc.date, pc.shift, ".PLAN_TYPE_CONTINUATION." as type, pc.has_continuation, pc.worktime, 1 as position, pc.comment, c.id calculation_id, c.name calculation, c.raport, c.length, c.unit, c.quantity, "
+                . "0 as gap_raport, "
+                . "0 as quantity_sum, "
+                . "round(cr.length_pure_1) / e.worktime * pc.worktime as length_pure_1, "
+                . "round(cr.length_dirty_1) / e.worktime * pc.worktime as length_dirty_1, "
+                . "cr.width_1, c.work_type_id, c.customer_id, cus.name customer, c.manager_id, u.first_name, u.last_name, "
+                . "ifnull((select sum(length) from calculation_take_stream where calculation_take_id in (select id from calculation_take where calculation_id = c.id)), 0) "
+                . "+ ifnull((select sum(length) from calculation_not_take_stream where calculation_stream_id in (select id from calculation_stream where calculation_id = c.id)), 0) length_cut, "
+                . "ifnull((select sum(weight) from calculation_take_stream where calculation_take_id in (select id from calculation_take where calculation_id = c.id)), 0) "
+                . "+ ifnull((select sum(weight) from calculation_not_take_stream where calculation_stream_id in (select id from calculation_stream where calculation_id = c.id)), 0) weight_cut, "
+                . "(select status_id from calculation_status_history where calculation_id = c.id order by date desc limit 1) status_id, "
+                . "(select comment from calculation_status_history where calculation_id = c.id order by date desc limit 1) status_comment, "
+                . "(select count(id) from calculation where customer_id = c.customer_id and id <= c.id) num_for_customer, "
+                . "(select count(id) from calculation_stream where calculation_id = c.id and (image1 <> '' or image2 <> '')) "
+                . "+ (select count(id) from calculation_quantity where calculation_id = c.id and (image1 <> '' or image2 <> '')) as images_count "
+                . "from plan_continuation pc "
+                . "inner join plan_edition e on pc.plan_edition_id = e.id "
+                . "inner join calculation c on e.calculation_id = c.id "
+                . "inner join calculation_result cr on cr.calculation_id = c.id "
+                . "inner join customer cus on c.customer_id = cus.id "
+                . "inner join user u on c.manager_id = u.id "
+                . "where e.work_id = ".WORK_CUTTING." and e.machine_id = ".$this->machine_id." and pc.date >= '".$this->dateFrom->format('Y-m-d')."' and pc.date <= '".$this->dateTo->format('Y-m-d')."' "
+                . "and (select count(id) from calculation_stream where calculation_id = c.id) > 0 "
+                . "order by date, shift, position";
+        $fetcher = new Fetcher($sql);
+        while($row = $fetcher->Fetch()) {
+            if(!array_key_exists($row['date'], $this->editions)) {
+                $this->editions[$row['date']] = array();
+            }
+            
+            if(!array_key_exists($row['shift'], $this->editions[$row['date']])) {
+                $this->editions[$row['date']][$row['shift']] = array();
+            }
+            
+            // Полное имя и фамилия менеджера
+            $row['manager'] = $row['last_name'].' '.mb_substr($row['first_name'], 0, 1).'.';
+            
+            // Кнопка "Приступить" имеется только в самой верхней работе под статусом "В плане резки".
+            if(($row['status_id'] == ORDER_STATUS_PLAN_CUT) && !$row['has_continuation'] && $button_start) {
+                $row['button_start'] = true;
+                $button_start = false;
+            }
+            else {
+                $row['button_start'] = false;
+            }
+            
+            // Кнопка "Продолжить" имеется у работ со статусом "Приладка на резке" или "Режется".
+            // И если такая есть хоть одна, то кнопки "Приступить" ни у кого быть не может.
+            if($row['status_id'] == ORDER_STATUS_CUT_PRILADKA) {
+                $this->has_priladka = true;
+            }
+            elseif($row['status_id'] == ORDER_STATUS_CUTTING) {
+                $this->has_take = true;
+            }
+            
+            array_push($this->editions[$row['date']][$row['shift']], $row);
+        }
+        
+        // Даты и смены
+        if($this->dateFrom < $this->dateTo) {
+            $date_diff = $this->dateFrom->diff($this->dateTo);
+            $interval = DateInterval::createFromDateString("1 day");
+            $period = new DatePeriod($this->dateFrom, $interval, $date_diff->days);
+        }
+        else {
+            $period = array();
+            array_push($period, $this->dateFrom);
+        }
+        
+        // Распределение тиражей по датам и сменам
+        foreach($period as $date) {
+            $day_editions = array();
+            if(key_exists($date->format('Y-m-d'), $this->editions) && key_exists('day', $this->editions[$date->format('Y-m-d')])) {
+                $day_editions = $this->editions[$date->format('Y-m-d')]['day'];
+            }
+            
+            $night_editions = array();
+            if(key_exists($date->format('Y-m-d'), $this->editions) && key_exists('night', $this->editions[$date->format('Y-m-d')])) {
+                $night_editions = $this->editions[$date->format('Y-m-d')]['night'];
+            }
+            
+            $cut_date = new CutDate($date, $this, $day_editions, $night_editions);
+            array_push($this->cut_dates, $cut_date);
+        }
+    }
+    
+    public function Show() {
+        include './_cut_timetable_view.php';
+    }
+}
+?>
