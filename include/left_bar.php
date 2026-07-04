@@ -110,5 +110,7 @@ elseif($folder == "okto") {
     <a href="<?= APPLICATION ?>/improvement/" class="left_bar_item ui_tooltip right<?=$improvement_class ?>" title="Предложения по улучшению"><i class="far fa-thumbs-up" style="font-size: 1.3rem;"></i></a>
     <?php endif; ?>
     
+    <?php if(LoggedIn()): ?>
     <a href="<?= APPLICATION ?>/okto/" class="left_bar_item ui_tooltip right<?=$okto_class ?>" title="Octopus"><i class="far fa-comments" style="font-size: 1.3rem;"></i></a>
+    <?php endif; ?>
 </div>
