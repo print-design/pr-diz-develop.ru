@@ -150,7 +150,7 @@ $total_weight = $row[0];
     </head>
     <body>
         <?php
-        include '../include/header_sklad.php';
+        include '../include/header_sklad_ds.php';
         include '../include/pager_top.php';
         $rowcounter = 0;
         ?>
@@ -164,8 +164,8 @@ $total_weight = $row[0];
                 <div class="p-0">
                     <table>
                         <tr>
-                            <td><h1 style="font-size: 32px; font-weight: 600;">Сработанная пленка</h1></td>
-                            <td style="padding-left: 20px; padding-right: 20px; font-weight: bold;">(<?= number_format($total_weight ?? 0, 0, ',', ' ') ?> кг)</td>
+                            <td><h1 class="flexim-header__title">Сработанная пленка</h1></td>
+                            <td style="padding-left: 20px; padding-right: 20px;"><span class="flexim-header__counter">(<?= number_format($total_weight ?? 0, 0, ',', ' ') ?> кг)</span></td>
                         </tr>
                     </table>
                 </div>

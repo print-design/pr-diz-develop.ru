@@ -64,7 +64,7 @@ else $title = ORDER_STATUS_TITLES[$status_id];
     </head>
     <body>
         <?php
-        include '../include/header_zakaz.php';
+        include '../include/header_zakaz_ds.php';
         include '../include/status_track.php';
         include '../include/pager_top.php';
         $rowcounter = 0;
@@ -76,8 +76,8 @@ else $title = ORDER_STATUS_TITLES[$status_id];
             }
             ?>
             <div class="d-flex justify-content-between mb-auto">
-                <div class="p-1 text-nowrap">
-                    <h1 style="font-size: 32px; font-weight: 600;" class="d-inline"><?=$title ?></h1>
+                <div class="p-1 text-nowrap flexim-header__heading">
+                    <h1 class="flexim-header__title"><?=$title ?></h1>
                     <?php
                     // Фильтр
                     $where = " where duplicate_status_id in (". implode(', ', ORDER_STATUSES_IN_WORK).")";
@@ -139,7 +139,7 @@ else $title = ORDER_STATUS_TITLES[$status_id];
                         $pager_total_count = $row[0];
                     }
                     ?>
-                    <div class="d-inline ml-3" style="color: gray; font-size: x-large;"><?=$pager_total_count ?></div>
+                    <span class="flexim-header__counter"><?=$pager_total_count ?></span>
                 </div>
                 <div class="p-1 text-nowrap">
                     <?php

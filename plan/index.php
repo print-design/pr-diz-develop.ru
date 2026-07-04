@@ -247,7 +247,7 @@ if(null !== filter_input(INPUT_POST, 'unpin_submit')) {
     </head>
     <body>
         <?php
-        include '../include/header_plan.php';
+        include '../include/header_plan_ds.php';
         include '../include/status_track.php';
         include '../include/big_image.php';
         ?>
@@ -293,6 +293,23 @@ if(null !== filter_input(INPUT_POST, 'unpin_submit')) {
                 </div>
             </div>
         </div>
+        <!-- План под DS-хэдер (спец от дизайна):
+             топбар ↔ ряд табов машин = 0px (вплотную);
+             подчёркивание (hr) сразу под табами;
+             16px от подчёркивания до контента.
+             .wrapper (динамический top) подстроится сам под hr. -->
+        <style>
+            /* План — отступы по эталону: топбар↔табы машин = глобальные 20px;
+               линия (hr) сразу под табами (margin:0). Воздух hr→контент (32px)
+               задаёт JS FixPlanWrapperTop, т.к. .wrapper позиционируется absolute. */
+            /* Саб-меню машин как DS-меню: линия-подчёркивание НА ВСЮ ШИРИНУ под
+               блоком (border-bottom у .nav2), активный таб — розовый 2px-сегмент
+               на этой линии внизу (не короткая черта на тексте). Старый hr убран. */
+            .nav2 { margin: 0; padding: 0; border-bottom: 1px solid var(--other-lines); }
+            .nav2 a { display: inline-block; padding-bottom: var(--size-s); border-bottom: 2px solid transparent; margin-bottom: -1px; }
+            .nav2 a.active { border-bottom-color: var(--primary-main); }
+            .container-fluid > hr { display: none; }
+        </style>
         <div class="container-fluid">
             <?php
             $header = '';
@@ -369,7 +386,7 @@ if(null !== filter_input(INPUT_POST, 'unpin_submit')) {
                             <button type="button" id="sidebarExpand" class="btn btn-link" style="display: none; padding-left: 0;">
                                 <img src="../images/icons/expand.png" style="margin-right: 8px;" />
                             </button>
-                            <h2>План&nbsp;&nbsp;<?=$header ?></h2>
+                            <h2 class="flexim-header__title">План&nbsp;&nbsp;<?=$header ?></h2>
                         </div>
                         <div class="d-flex justify-content-end">
                             <form class="form-inline" method="get">
@@ -425,6 +442,33 @@ if(null !== filter_input(INPUT_POST, 'unpin_submit')) {
         include '../include/footer.php';
         ?>
         <script>
+            /* ============================================================
+               ФИКС ВЕРХА ПЛАНА ПОД DS-ХЭДЕР (портируемый).
+
+               Проблема: блок расписания `.wrapper` спозиционирован
+               `position:absolute` с жёстким `top:100px`, который был подогнан
+               под ВЫСОТУ СТАРОГО ХЭДЕРА. При замене хэдера (другая высота) число
+               100 перестаёт совпадать — расписание налезает на `<hr>` и табы машин,
+               верх «съезжает».
+
+               Решение: считаем `top` ДИНАМИЧЕСКИ = низ флоу-контента над расписанием
+               (шапка + ряд табов машин `.nav2` + `<hr>` внутри `.container-fluid`).
+               Разработчику при замене хэдера тут править НИЧЕГО не нужно — значение
+               подстраивается само. Работает при загрузке и ресайзе.
+               ============================================================ */
+            function FixPlanWrapperTop() {
+                var nav2 = document.querySelector('.nav2');
+                var cf = document.querySelector('.container-fluid');
+                var wrapper = document.querySelector('.wrapper');
+                if (!wrapper) return;
+                var GAP = 32; // отступ от низа саб-меню (линии) до контента, px (по эталону)
+                var anchor = nav2 ? nav2.getBoundingClientRect() : (cf ? cf.getBoundingClientRect() : null);
+                if (anchor) wrapper.style.top = Math.round(anchor.bottom + window.scrollY + (nav2 ? GAP : 0)) + 'px';
+            }
+            FixPlanWrapperTop();
+            window.addEventListener('load', FixPlanWrapperTop);
+            window.addEventListener('resize', FixPlanWrapperTop);
+
             function EnableMenu() {
                 $('.timetable_menu_trigger').click(function() {
                     var menu = $(this).next('.timetable_menu');

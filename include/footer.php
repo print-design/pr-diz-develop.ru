@@ -3,6 +3,12 @@
 <script src='<?=APPLICATION ?>/js/jquery-3.5.1.min.js'></script>
 <script src="<?=APPLICATION ?>/js/popper.min.js"></script>
 <script src='<?=APPLICATION ?>/js/bootstrap.min.js'></script>
+<!-- Дизайн-система Flexim (эксперимент на develop): рендер иконок data-flexim-icon -->
+<script src="<?=APPLICATION ?>/flexim-ds/icons.js?v=<?=time() ?>"></script>
+<script>if(window.fleximIcons) window.fleximIcons.renderAll();</script>
+<?php if(!empty($ds_header)): // самопроверка DS-хэдера на DS-страницах ?>
+<script src="<?=APPLICATION ?>/flexim-ds/_dev-selfcheck.js?v=<?=time() ?>"></script>
+<?php endif; ?>
 <script src="<?=APPLICATION ?>/js/jquery-ui.js"></script>
 <script src="<?=APPLICATION ?>/js/jquery.maskedinput.js"></script>
 <script src="<?=APPLICATION ?>/js/calculation.js?version=100"></script>

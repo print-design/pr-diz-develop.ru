@@ -56,7 +56,7 @@ function ShowOrderStatus($status_id, $length_cut, $weight_cut, $quantity_sum, $q
     </head>
     <body>
         <?php
-        include '../include/header_pack.php';
+        include '../include/header_pack_ds.php';
         include '../include/status_track.php';
         include '../include/pager_top.php';
         $rowcounter = 0;
@@ -68,8 +68,8 @@ function ShowOrderStatus($status_id, $length_cut, $weight_cut, $quantity_sum, $q
             }
             ?>
             <div class="d-flex justify-content-between mb-auto">
-                <div class="p-1 text-nowrap">
-                    <h1 class="d-inline"><?= key_exists($status_id, ORDER_STATUS_NAMES) ? ORDER_STATUS_NAMES[$status_id] : "Производят" ?></h1>
+                <div class="p-1 text-nowrap flexim-header__heading">
+                    <h1 class="flexim-header__title"><?= key_exists($status_id, ORDER_STATUS_NAMES) ? ORDER_STATUS_NAMES[$status_id] : "Производят" ?></h1>
                     <?php
                     // Фильтр
                     $filter = '';
@@ -140,7 +140,7 @@ function ShowOrderStatus($status_id, $length_cut, $weight_cut, $quantity_sum, $q
                         $pager_total_count = $row[0];
                     }
                     ?>
-                    <div class="d-inline ml-3" style="color: gray; font-size: x-large;"><?=$pager_total_count ?></div>
+                    <span class="flexim-header__counter"><?=$pager_total_count ?></span>
                 </div>
                 <div class="p-1 text-nowrap d-flex justify-content-end">
                     <?php if($status_id == ORDER_STATUS_SHIPPED): ?>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Принт-Дизайн — Тест DS-хэдера</title>
+
+  <!-- Те же версии, что в проде: Bootstrap 4.0.0 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+  <!-- Дизайн-система Flexim: сначала токены, потом стили компонентов -->
+  <link rel="stylesheet" href="flexim-ds/tokens.css">
+  <link rel="stylesheet" href="flexim-ds/overrides.css">
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ЛЕВАЯ РЕЙКА — реальные разделы pr-diz-test.ru -->
+  <aside class="flexim-nav-rail" aria-label="Левое меню">
+    <span class="flexim-logo__mark" aria-hidden="true"></span>
+    <nav class="flexim-nav-rail__tabs">
+      <button type="button" class="flexim-nav-rail__tab flexim-nav-rail__tab--active" aria-label="Заказы"><span data-flexim-icon="time" data-size="24" aria-hidden="true"></span></button>
+      <button type="button" class="flexim-nav-rail__tab" aria-label="Склад"><span data-flexim-icon="box" data-size="24" aria-hidden="true"></span></button>
+      <button type="button" class="flexim-nav-rail__tab" aria-label="План"><span data-flexim-icon="calendar" data-size="24" aria-hidden="true"></span></button>
+      <button type="button" class="flexim-nav-rail__tab" aria-label="Резка"><span data-flexim-icon="factory" data-size="24" aria-hidden="true"></span></button>
+      <button type="button" class="flexim-nav-rail__tab" aria-label="Упаковка"><span data-flexim-icon="loader-machine" data-size="24" aria-hidden="true"></span></button>
+      <button type="button" class="flexim-nav-rail__tab" aria-label="Админка"><span data-flexim-icon="settings" data-size="24" aria-hidden="true"></span></button>
+      <button type="button" class="flexim-nav-rail__tab" aria-label="Предложения по улучшению"><span data-flexim-icon="like" data-size="24" aria-hidden="true"></span></button>
+    </nav>
+  </aside>
+
+  <div class="app-main">
+
+    <!-- ВЕРХНЯЯ ШАПКА — табы-воронка статусов + поиск + user-чип -->
+    <div class="app-topbar">
+      <div class="flexim-header-menu">
+        <nav class="flexim-header-menu__nav">
+          <a href="#" class="flexim-header-menu__item flexim-header-menu__item--active">Отгружено</a>
+          <a href="#" class="flexim-header-menu__item">Ждёт отгрузки</a>
+          <a href="#" class="flexim-header-menu__item">Производят</a>
+          <a href="#" class="flexim-header-menu__item">В работе</a>
+          <a href="#" class="flexim-header-menu__item">Расчёты</a>
+          <a href="#" class="flexim-header-menu__item">Черновики</a>
+          <a href="#" class="flexim-header-menu__item">Корзина</a>
+        </nav>
+        <div class="app-topbar__right">
+          <!-- SEARCH (Figma 4341:94353) — поле с чипами активных условий -->
+          <div class="flexim-search-row flexim-search-row--fill" data-flexim-search>
+            <div class="flexim-search flexim-search--fill">
+              <div class="flexim-search__field">
+                <span class="flexim-search__icon" data-flexim-icon="search" data-size="24" aria-hidden="true"></span>
+                <div class="flexim-search__chips"></div>
+                <input class="flexim-search__input" type="text" placeholder="Поиск">
+                <button type="button" class="flexim-search__clear-all" aria-label="Очистить всё"><span data-flexim-icon="x-small" data-size="16" aria-hidden="true"></span></button>
+              </div>
+            </div>
+          </div>
+          <div class="flexim-user-chip">
+            <span class="flexim-avatar flexim-avatar--m flexim-avatar--initials" title="Пономарёв Сергей">ПС</span>
+            <span class="flexim-user-chip__name">
+              <a href="#" class="flexim-user-chip__title">Пономарёв Сергей</a>
+              <span class="flexim-user-chip__role">Технолог</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- КОНТЕНТ -->
+    <main class="app-content">
+      <header class="flexim-header">
+        <div class="flexim-header__heading">
+          <h1 class="flexim-header__title">Тест DS-хэдера</h1>
+        </div>
+      </header>
+      <p style="padding: 0 var(--size-m); color: var(--text-secondary);">
+        Это отдельная тестовая страница. Здесь подключена дизайн-система Flexim
+        (токены + стили компонентов + иконки) и собран хэдер из эталона
+        <code>01-orders.html</code>. Остальной сайт эта страница не затрагивает.
+      </p>
+    </main>
+
+  </div>
+</div>
+
+<!-- Скрипты — теми же версиями, что в проде -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="flexim-ds/icons.js"></script>
+<script>
+  if (window.fleximIcons) window.fleximIcons.renderAll();
+</script>
+<!-- Search-with-chips в топбаре -->
+<script src="flexim-ds/_search-topbar.js"></script>
+</body>
+</html>

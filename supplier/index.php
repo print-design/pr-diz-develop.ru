@@ -60,7 +60,7 @@ if(null !== filter_input(INPUT_POST, 'create_supplier_submit')) {
     </head>
     <body>
         <?php
-        include '../include/header_admin.php';
+        include '../include/header_admin_ds.php';
         ?>
         <div id="create_supplier" class="modal fade show">
             <div class="modal-dialog">
@@ -91,7 +91,7 @@ if(null !== filter_input(INPUT_POST, 'create_supplier_submit')) {
             ?>
             <div class="d-flex justify-content-between mb-auto">
                 <div class="p-0">
-                    <h1>Поставщики</h1>
+                    <h1 class="flexim-header__title">Поставщики</h1>
                 </div>
                 <div class="pt-1">
                     <button class="btn btn-dark" data-toggle="modal" data-target="#create_supplier">

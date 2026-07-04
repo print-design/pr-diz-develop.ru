@@ -151,7 +151,7 @@ if(null !== filter_input(INPUT_POST, 'graph_key_delete_submit')) {
     </head>
     <body>
         <?php
-        include '../include/header_admin.php';
+        include '../include/header_admin_ds.php';
         ?>
         <div id="user_change_password" class="modal fade show">
             <div class="modal-dialog">
@@ -243,7 +243,7 @@ if(null !== filter_input(INPUT_POST, 'graph_key_delete_submit')) {
             ?>
             <div class="d-flex justify-content-between mb-auto">
                 <div class="p-0">
-                    <h1>Сотрудники</h1>
+                    <h1 class="flexim-header__title">Сотрудники</h1>
                 </div>
                 <div class="pt-1">
                     <a href="create.php" title="Добавить пользователя" class="btn btn-dark">

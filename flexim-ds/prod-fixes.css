@@ -1,0 +1,46 @@
+/*
+ * Flexim DS — точечные фиксы для НЕИНВАЗИВНОГО хэдера на живом продукте.
+ * Хэдер позиционируется поверх (рейка fixed, верхняя панель sticky); контент
+ * НЕ оборачивается и НЕ меняется. Подключать ПОСЛЕ header.css.
+ */
+
+/* --- Позиционирование хэдера --- */
+/* Рейка фиксирована слева (как старый #left_bar; отступ body под неё — из main.css).
+   Верхний слой + тень вправо на верхнюю панель и контент (Figma). */
+.flexim-nav-rail {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  z-index: 1040;
+  box-shadow: 4px 0 16px rgba(141, 134, 173, 0.25);
+}
+/* Верхняя панель прилипает к верху; ниже рейки по слою. */
+.app-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  margin-bottom: var(--size-l); /* воздух под хэдером (20px) */
+}
+
+/* --- Легаси main.css перебивает ссылки ДС по специфичности (a:not(.btn) розовый,
+       red+underline на hover). Возвращаем поведение ДС с большей специфичностью. --- */
+.app-topbar a.flexim-header-menu__item:link,
+.app-topbar a.flexim-header-menu__item:visited { color: var(--text-primary); text-decoration: none; }
+.app-topbar a.flexim-header-menu__item:hover,
+.app-topbar a.flexim-header-menu__item:active { color: var(--primary-light); text-decoration: none; }
+
+.flexim-nav-rail a.flexim-nav-rail__tab:link,
+.flexim-nav-rail a.flexim-nav-rail__tab:visited,
+.flexim-nav-rail a.flexim-nav-rail__tab:hover,
+.flexim-nav-rail a.flexim-nav-rail__tab:active { color: var(--primary-main); text-decoration: none; }
+
+.flexim-nav-rail a.flexim-logo__mark:hover,
+.flexim-nav-rail a.flexim-logo__mark:active { text-decoration: none; }
+
+.app-topbar a.flexim-user-chip__title:link,
+.app-topbar a.flexim-user-chip__title:visited { color: var(--text-primary); text-decoration: none; }
+.app-topbar a.flexim-user-chip__title:hover { color: var(--primary-light); text-decoration: none; }
+
+/* --- Поиск: DS-фокус-рамка через :focus-within (JS в проде нет) --- */
+.flexim-search__field:focus-within { border: 2px solid var(--primary-light); padding: 3px 11px; }
